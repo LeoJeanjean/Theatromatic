@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       prompt: "",
-      response: "",
+      responseGPT: "",
+      promptTextArea: "",
     };
   },
   methods: {
@@ -34,7 +35,7 @@ export default {
           },
         }
       ).then((response) => {
-        this.response = response.data["data"];
+        this.responseGPT = response.data["data"];
       })
     }
   },
