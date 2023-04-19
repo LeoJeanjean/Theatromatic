@@ -25,7 +25,7 @@
         <label for="password">Mot de passe</label>
         <input type="password" name="password" id="password" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordLogin" />
       </div>
-      <button type="submit" class="btn btn-primary btn-ghost">Se connecter</button>
+      <button type="submit" class="btn btn-primary btn-ghost" @click="login()">Se connecter</button>
     </form>
 
     <form class="login-form" action="javascript:void(0);" v-else>
@@ -81,6 +81,17 @@ import User from "../models/User"
       
       ).then((response) => {
         console.log(response);
+      })
+    },
+    async login() {
+      let userInfos = {"name" : this.nameLogin, "password": this.passwordLogin }
+      const response = await axios.post(
+        'http://localhost:3000/login',
+        {
+          userInput: userInfos
+        },
+      ).then((response) => {
+        console.log(response.data);
       })
     }
     }

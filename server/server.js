@@ -50,15 +50,45 @@ async function addUser(user) {
       "name" : user["name"],
       "email" : user["email"],
       "password" : user["password"],
-    }).then( () => {
+    }).finally( () => {
       client.close();
     });
     console.log("inserted");
   } catch(e) {
     console.log(e);
   }
-  
+ 
 }
+
+async function checkUserExist(inputName, inputPassword) {
+
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("users");
+    const result = await  collection.find(
+      {
+        "name" : inputName
+      }
+    ).toArray().then((userData) => {
+      console.log("debut");
+      if (userData.length > 0) {
+        if (userData[0]["password"] == inputPassword) {
+          return userData[0];
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+
+    })
+    return(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 async function getCharacters() {
   try {
@@ -95,6 +125,12 @@ app.post('/signup', (req,res) => {
   addUser(req.body["user"]);
   res.send('user is signup');
 })
+
+app.post('/login', async (req,res) => {
+  const connctedUser = await checkUserExist(req.body["userInput"]["name"], req.body["userInput"]["password"]);
+  res.send(connctedUser)
+})
+
 app.get('/characters', async (req, res) => {
 try {
     const characters = await getCharacters();
