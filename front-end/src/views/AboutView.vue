@@ -4,12 +4,12 @@
     <input type="textarea" v-model="promptTextArea" />
     <button @click="this.handleClick">Click me</button>
     <div>
-      <p>{{this.response}}</p>
+      <p>{{this.responseGPT}}</p>
     </div>
   </div>
 </template>
 
-<script lang="javascript">
+<script>
 
 import axios from 'axios';
 
