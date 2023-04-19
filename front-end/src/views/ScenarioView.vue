@@ -14,6 +14,7 @@
 <script>
 import CharacterList from "@/components/characterList.vue";
 import router from "@/router";
+import axios from "axios";
 export default {
   name: "ScenarioView",
   components: {CharacterList},
@@ -26,17 +27,33 @@ export default {
       this.persoInScenar = ''
       for (const index in this.persoList) {
         if (this.persoList[index].inScenar === true) {
-          this.persoInScenar += this.persoList[index].id + "-"
+          this.persoInScenar += this.persoList[index]._id + "-"
         }
       }
       this.persoInScenar = this.persoInScenar.slice(0,-1)
       router.push({ name: 'scene', params: {personnage: this.persoInScenar, script: this.script}})
     }
   },
-  created() {
-    for (let i = 1; i <= 20; i++) {
-      this.persoList.push({id: i,name: 'test'+i,inScenar: false})
-    }
+  async created() {
+    await axios.get(
+        'http://localhost:3000/characters',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+    ).then((response) => {
+      for (const index in response.data) {
+        this.persoList.push(
+            {
+              _id: response.data[index]._id,
+              name: response.data[index].name,
+              InScenar: false
+            }
+        )
+      }
+    })
+    console.log(this.persoList)
   }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div class="charaList">
-    <div @click="check(perso.id)" v-for="perso in persoList">
+    <div @click="check(perso._id)" v-for="perso in persoList">
         {{ perso.name }}
-        <input :id="perso.id" v-model="perso.inScenar" class="check" type="checkbox" />
+        <input @click="check(perso._id)" :id="perso._id" v-model="perso.inScenar" class="check" type="checkbox" />
     </div>
   </div>
 </template>
