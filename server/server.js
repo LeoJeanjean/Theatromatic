@@ -37,6 +37,29 @@ async function run() {
 }
 run().catch(console.dir);
 
+async function addUser(user) {
+  
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("users");
+
+    // Query the collection and log the result
+   // const result = await collection.findOne();
+    collection.insertOne({
+      "name" : user["name"],
+      "email" : user["email"],
+      "password" : user["password"],
+    }).then( () => {
+      client.close();
+    });
+    console.log("inserted");
+  } catch(e) {
+    console.log(e);
+  }
+  
+}
+
 async function getCharacters() {
   try {
     await client.connect();
@@ -67,6 +90,11 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
   });
   
+app.post('/signup', (req,res) => {
+  console.log(req.body["user"]["name"]);
+  addUser(req.body["user"]);
+  res.send('user is signup');
+})
 app.get('/characters', async (req, res) => {
 try {
     const characters = await getCharacters();
