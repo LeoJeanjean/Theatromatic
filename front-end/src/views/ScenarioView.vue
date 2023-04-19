@@ -13,22 +13,23 @@
 
 <script>
 import CharacterList from "@/components/characterList.vue";
+import router from "@/router";
 export default {
   name: "ScenarioView",
   components: {CharacterList},
   data: () => ({
     persoList: [],
-    persoInScenar: [],
     script: ''
   }),
   methods: {
     submit() {
+      this.persoInScenar = ''
       for (const index in this.persoList) {
         if (this.persoList[index].inScenar === true) {
-          this.persoInScenar.push({id:this.persoList[index].id})
+          this.persoInScenar += this.persoList[index].id + "-"
         }
       }
-      console.log(this.persoInScenar,this.script)
+      this.persoInScenar = this.persoInScenar.slice(0,-1)
       router.push({ name: 'scene', params: {personnage: this.persoInScenar, script: this.script}})
     }
   },
