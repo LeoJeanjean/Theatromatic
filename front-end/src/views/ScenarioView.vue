@@ -24,14 +24,15 @@ export default {
   }),
   methods: {
     submit() {
-      this.persoInScenar = ''
+      this.persoInScenar = []
       for (const index in this.persoList) {
         if (this.persoList[index].inScenar === true) {
-          this.persoInScenar += this.persoList[index]._id + "-"
+          this.persoInScenar.push(this.persoList[index])
         }
       }
-      this.persoInScenar = this.persoInScenar.slice(0,-1)
-      router.push({ name: 'scene', params: {personnage: this.persoInScenar, script: this.script}})
+      localStorage.setItem('script', this.script)
+      localStorage.setItem('persoList', this.persoList)
+      router.push({ name: 'scene'})
     }
   },
   async created() {
