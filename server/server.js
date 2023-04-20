@@ -37,14 +37,68 @@ async function run() {
 }
 run().catch(console.dir);
 
+async function addUser(user) {
+  
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("users");
+
+    // Query the collection and log the result
+   // const result = await collection.findOne();
+    collection.insertOne({
+      "name" : user["name"],
+      "email" : user["email"],
+      "password" : user["password"],
+      "characters" : []
+    }).finally( () => {
+      client.close();
+    });
+    console.log("inserted");
+  } catch(e) {
+    console.log(e);
+  }
+ 
+}
+
+async function checkUserExist(inputName, inputPassword) {
+
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("users");
+    const result = await  collection.find(
+      {
+        "name" : inputName
+      }
+    ).toArray().then((userData) => {
+      if (userData.length > 0) {
+        if (userData[0]["password"] == inputPassword) {
+          return userData[0];
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+
+    })
+    return(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 async function getCharacters() {
   try {
     await client.connect();
+
     const database = client.db("database");
     const collection = database.collection("characters");
 
     // Query the collection and log the result
-    const result = await collection.findOne();
+    const result = await collection.find().toArray();
     console.log(result);
     return(result);
   } finally {
@@ -56,16 +110,29 @@ async function addCharacter(character) {
   try {
     await client.connect();
     const database = client.db("database");
-    const collection = database.collection("characters");
+    const collectionChar = database.collection("characters");
+    const collectionUser = database.collection("users");
+    
 
-    collection.insertOne({
+    collectionChar.insertOne({
       "name" : character["name"],
       "gender" : character["gender"],
       "job" : character["job"],
       "characteristics" : character["characteristics"],
     }).finally( () => {
+      //client.close();
+    });
+
+    collectionUser.updateOne({
+      "name" : character["username"]
+    }, {
+      $push: {
+        "characters" : character["name"]
+      }
+    }).finally( () => {
       client.close();
     });
+    
     console.log("inserted");
   } catch(e) {
     console.log(e);
@@ -87,6 +154,17 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
   });
   
+app.post('/signup', (req,res) => {
+  console.log(req.body["user"]["name"]);
+  addUser(req.body["user"]);
+  res.send('user is signup');
+})
+
+app.post('/login', async (req,res) => {
+  const connctedUser = await checkUserExist(req.body["userInput"]["name"], req.body["userInput"]["password"]);
+  res.send(connctedUser)
+})
+
 app.get('/characters', async (req, res) => {
 try {
     const characters = await getCharacters();
