@@ -26,25 +26,23 @@
           superFast: 10,
         },
         scenarioText: `
-                
-[{"begin": "Bebo et Hamza se tiennent devant la porte d'une maison en ruine construite il y a 2000 ans, réputée hantée."},
-{"dialogue": "Je ne suis pas sûr que nous devrions entrer ici. Ça me semble dangereux.", "talkingCharacter": "Hamza"},
-{"dialogue": "Ne t'inquiète pas, Hamza. J'ai entendu dire que cette maison était hantée par un fantôme inoffensif. Et puis, nous avons besoin de trouver des indices pour notre projet d'histoire.", "talkingCharacter": "Bebo"},
-{"action": "Bebo ouvre la porte et entre dans la maison. Hamza hésite un moment, puis le suit."},
-{"action": "Les deux amis commencent à explorer la maison. Ils remarquent des objets antiques et des peintures sur les murs."},
-{"dialogue": "Je me sens observé...", "talkingCharacter": "Hamza"},
-{"dialogue": "Tu imagines des choses, Hamza. Tout est calme ici.", "talkingCharacter": "Bebo"},
-{"action": "Soudain, un objet tombe du plafond et Hamza se met à crier."},
-{"dialogue": "Je te l'avais dit que c'était dangereux!", "talkingCharacter": "Hamza"},
-{"dialogue": "Ce n'était qu'une chauve-souris, Hamza. Tu n'as pas besoin d'avoir peur.", "talkingCharacter": "Bebo"},
-{"action": "Les amis continuent leur exploration et découvrent un passage secret qui mène à une pièce cachée."},
-{"dialogue": "Regarde, Hamza! Il y a une vieille carte ici. C'est peut-être la clé pour trouver un trésor caché.", "talkingCharacter": "Bebo"},
-{"dialogue": "Je ne suis pas sûr de vouloir chercher un trésor dans une maison hantée, Bebo.", "talkingCharacter": "Hamza"},
-{"dialogue": "Allons, Hamza. C'est notre chance de devenir riches!", "talkingCharacter": "Bebo"},
-{"action": "Les deux amis prennent la carte et commencent leur quête pour trouver le trésor caché. Finalement, ils trouvent un coffre rempli de pièces d'or et de pierres précieuses."},
-{"dialogue": "Nous avons réussi, Hamza! Nous sommes riches!", "talkingCharacter": "Bebo"},
-{"dialogue": "Je ne sais pas si ça en valait la peine. J'ai encore des frissons en pensant à cette maison hantée.", "talkingCharacter": "Hamza"},
-{"Fin": "Bebo et Hamza sortent de la maison hantée avec le trésor en main. Bien qu'Hamza n'était pas convaincu de l'idée d'explorer une maison hantée, il était heureux de pouvoir partager les richesses trouvées avec son ami Bebo."}]
+        [{"begin": "Luc était un bosseur et un rêveur qui travaillait dur pour réaliser ses aspirations."},
+{"action": "Il se levait tôt chaque matin pour aller à la salle de sport avant de se rendre à son travail dans une entreprise de technologie en plein essor."},
+{"dialogue": "Salut Luc, tu as l'air fatigué ce matin. Tu as passé une mauvaise nuit ?", "talkingCharacter": "Louis"},
+{"dialogue": "Non, je suis juste un peu stressé. J'ai une grande présentation aujourd'hui et j'espère que tout ira bien.", "talkingCharacter": "Luc"},
+{"action": "Luc passa la journée à travailler sur sa présentation, révisant chaque détail plusieurs fois pour s'assurer qu'il n'oublierait rien."},
+{"dialogue": "Luc, ta présentation était incroyable ! Tu as vraiment impressionné tout le monde dans la salle.", "talkingCharacter": "Stéphanie"},
+{"dialogue": "Merci beaucoup Stéphanie, je suis content que tout ait bien marché.", "talkingCharacter": "Luc"},
+{"dialogue": "Hé les gars, regardez ça !", "talkingCharacter": "Jean"},
+{"action": "Jean montra un article sur son téléphone portable qui annonçait qu'un petit garçon était coincé dans un arbre près de l'entreprise."},
+{"dialogue": "Nous devons faire quelque chose pour aider ce garçon !", "talkingCharacter": "Jean"},
+{"dialogue": "Je suis d'accord, allons-y tout de suite !", "talkingCharacter": "Luc"},
+{"action": "Ils coururent tous ensemble vers l'arbre où le garçon était coincé."},
+{"dialogue": "Ne t'inquiète pas petit gars, nous allons te sortir de là.", "talkingCharacter": "Jean"},
+{"action": "Jean grimpa à l'arbre et aida le garçon à descendre en toute sécurité."},
+{"dialogue": "Merci beaucoup les gars, vous êtes des héros !", "talkingCharacter": "Le petit garçon"},
+{"Fin": "Luc réalisa qu'il pouvait être à la fois un bosseur et un rêveur tout en étant un héros pour quelqu'un d'autre."}]
+
           `,
         textLines: [
           {speed: 10, string: "Oh, hello!", character: "Tom"},
@@ -112,17 +110,21 @@
         let scenar = JSON.parse(this.scenarioText); 
 
         console.log(JSON.parse(this.scenarioText));
-//        this.createDivText(JSON.parse(this.scenarioText)[0])
+        this.createDivText(JSON.parse(this.scenarioText)[0])
         for (let i = 1; i < JSON.parse(this.scenarioText).length - 1; i++) {
           await sleep(2000)
 
           this.duplicate(JSON.parse(this.scenarioText)[i])
           console.log(JSON.parse(this.scenarioText)[i]);
         }
-      //  this.createDivText(scenar[scenar.length - 1])
+        this.createDivText(scenar[scenar.length - 1])
         // create for end
         await sleep(1000)
       }
+
+      // selection pixabay plutôt que random image
+
+
   },mounted() {
       this.original = document.getElementById('text-id')      
       this.timeSensativeAction();
