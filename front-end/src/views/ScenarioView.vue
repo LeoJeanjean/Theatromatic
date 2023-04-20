@@ -31,7 +31,7 @@ export default {
         }
       }
       localStorage.setItem('script', this.script)
-      localStorage.setItem('persoList', this.persoList)
+      localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
       router.push({ name: 'scene'})
     }
   },
@@ -54,7 +54,6 @@ export default {
         )
       }
     })
-    console.log(this.persoList)
   }
 }
 </script>
