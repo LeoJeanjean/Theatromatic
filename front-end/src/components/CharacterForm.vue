@@ -102,9 +102,9 @@ export default {
 
             e.preventDefault();
         },
-        createNewCharacter: async function (name,gender,job,characteristics) {
+        createNewCharacter: async function (name,gender,job,characteristics,userID) {
             var user = JSON.parse(localStorage.getItem('user')); //retrieve the object
-            const newCharacter = new Character(name,gender,job,characteristics,user["name"]);
+            const newCharacter = new Character(name,gender,job,characteristics,user["_id"]);
             const response = await axios.post(
                 'http://localhost:3000/addCharacter',
                 {

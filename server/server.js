@@ -14,7 +14,7 @@ app.use(express.json());
 
 /// MONGO CONNECTION AND QUERIES /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(process.env.URI, {
   serverApi: {
@@ -112,22 +112,22 @@ async function addCharacter(character) {
     const database = client.db("database");
     const collectionChar = database.collection("characters");
     const collectionUser = database.collection("users");
-    
 
-    collectionChar.insertOne({
+    const newCharacter = {
       "name" : character["name"],
       "gender" : character["gender"],
       "job" : character["job"],
       "characteristics" : character["characteristics"],
-    }).finally( () => {
-      //client.close();
-    });
+    };
+    
+    const result = await collectionChar.insertOne(newCharacter);
+    console.log(result.insertedId + " is the id");
 
     collectionUser.updateOne({
-      "name" : character["username"]
+      "_id" : new ObjectId(character["userID"])
     }, {
       $push: {
-        "characters" : character["name"]
+        "characters" : result.insertedId
       }
     }).finally( () => {
       client.close();
