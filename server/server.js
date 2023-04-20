@@ -14,7 +14,7 @@ app.use(express.json());
 
 /// MONGO CONNECTION AND QUERIES /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(process.env.URI, {
   serverApi: {
@@ -50,6 +50,7 @@ async function addUser(user) {
       "name" : user["name"],
       "email" : user["email"],
       "password" : user["password"],
+      "characters" : []
     }).finally( () => {
       client.close();
     });
@@ -105,6 +106,39 @@ async function getCharacters() {
   }
 }
 
+async function addCharacter(character) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collectionChar = database.collection("characters");
+    const collectionUser = database.collection("users");
+
+    const newCharacter = {
+      "name" : character["name"],
+      "gender" : character["gender"],
+      "job" : character["job"],
+      "characteristics" : character["characteristics"],
+    };
+    
+    const result = await collectionChar.insertOne(newCharacter);
+    console.log(result.insertedId + " is the id");
+
+    collectionUser.updateOne({
+      "_id" : new ObjectId(character["userID"])
+    }, {
+      $push: {
+        "characters" : result.insertedId
+      }
+    }).finally( () => {
+      client.close();
+    });
+    
+    console.log("inserted");
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 /// OPENAI GPT-3 QUERIES ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const { Configuration, OpenAIApi } = require("openai");
@@ -140,6 +174,12 @@ try {
     res.status(500).send('Server Error');
 }
 });
+
+app.post('/addCharacter', (req,res) => {
+  console.log(req.body["character"]["name"]);
+  addCharacter(req.body["character"]);
+  res.send('character is added');
+})
 
 app.post('/gpt', async (req, res) => {
   if(!req.body) return res.status(400).json({ success: false, error: 'You must provide a prompt' });
