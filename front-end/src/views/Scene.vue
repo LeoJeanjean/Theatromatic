@@ -64,6 +64,8 @@
     },
     mounted() {
       this.setup();
+      console.log(localStorage.getItem('script'));
+      console.log(localStorage.getItem('persoList'));
     }  
   }
 

@@ -1,11 +1,10 @@
 <script>
-import { RouterLink } from 'vue-router'
 </script>
 
 <template>
   <nav class='buttons'>
-    <RouterLink class='button' to="/character">Personnages</RouterLink>
-    <RouterLink class='button' to="/scene">Lancer une pièce</RouterLink>
+    <RouterLink class='button' to="/personnages">Personnages</RouterLink>
+    <RouterLink class='button' to="/scenario">Lancer une pièce</RouterLink>
   </nav>
 </template>
 
