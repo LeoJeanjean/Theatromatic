@@ -71,7 +71,6 @@ async function checkUserExist(inputName, inputPassword) {
         "name" : inputName
       }
     ).toArray().then((userData) => {
-      console.log("debut");
       if (userData.length > 0) {
         if (userData[0]["password"] == inputPassword) {
           return userData[0];

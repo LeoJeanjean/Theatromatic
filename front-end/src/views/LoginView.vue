@@ -45,14 +45,15 @@
       <button type="submit" class="btn btn-primary btn-ghost" @click="signup()">S'inscrire</button>
     </form>
   </div>
-
-  {{ passwordSignup }}
-
+  <button @click="send">Click Me</button>
 </template>
 
 <script>
 import axios from 'axios';
-import User from "../models/User"
+import User from "../models/User";
+import useUserStore from "../stores/user";
+import { mapActions, mapState } from 'pinia'
+
 
   export default {
      
@@ -67,10 +68,15 @@ import User from "../models/User"
       }
     },
     methods: {
+      ...mapActions(useUserStore, ['updateUserDatas']),
+      ...mapActions(useUserStore, ['getUserDatas']),
+      send() {
+        this.$emit('send', 'Hello World');
+      },
       toggleCheckbox() {
-      this.checkbox = !this.checkbox
-      this.$emit('setCheckboxVal', this.checkbox)
-    },
+        this.checkbox = !this.checkbox
+        this.$emit('setCheckboxVal', this.checkbox)
+      },
     async signup() {
       let newUser = new User(this.nameSignup, this.email, this.passwordSignup)
       const response = await axios.post(
@@ -92,8 +98,21 @@ import User from "../models/User"
         },
       ).then((response) => {
         console.log(response.data);
+        this.updateUserDatas(response.data);
+        console.log(this.userDatas);
+        console.log(response.data);
+        if (response.data !== false) {
+          this.$router.push('/');
+          this.$emit('send', true);
+        } else {
+          console.log("toast :mauvais identifiant");
+        }
       })
     }
+    }, 
+    computed: {
+      ...mapState(useUserStore, ['userDatas'])
+
     }
   }
 
