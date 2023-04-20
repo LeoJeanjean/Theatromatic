@@ -66,6 +66,8 @@
             this.$router.push('/login')
       }
       this.setup();
+      console.log(localStorage.getItem('script'));
+      console.log(localStorage.getItem('persoList'));
     }  
   }
 

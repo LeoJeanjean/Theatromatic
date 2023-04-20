@@ -92,11 +92,12 @@ async function checkUserExist(inputName, inputPassword) {
 async function getCharacters() {
   try {
     await client.connect();
+
     const database = client.db("database");
     const collection = database.collection("characters");
 
     // Query the collection and log the result
-    const result = await collection.findOne();
+    const result = await collection.find().toArray();
     console.log(result);
     return(result);
   } finally {
