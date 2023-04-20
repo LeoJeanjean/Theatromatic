@@ -1,5 +1,12 @@
 <script>
 import { RouterLink } from 'vue-router'
+export default {
+  mounted() { 
+    if (localStorage.getItem("user") == null) {
+            this.$router.push('/login')
+        }
+  }
+}
 </script>
 
 <template>
@@ -8,6 +15,7 @@ import { RouterLink } from 'vue-router'
     <RouterLink class='button' to="/scene">Lancer une pièce</RouterLink>
   </nav>
 </template>
+
 
 <style>
 .buttons{

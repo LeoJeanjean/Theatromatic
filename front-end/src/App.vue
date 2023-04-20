@@ -9,9 +9,10 @@ import { RouterView } from 'vue-router'
   <div style="background-color: antiquewhite;">
     <nav>
       <ul class="nav-elements">
-        <li>Home</li>
-        <li>Personnages</li>
-        <li>{{ this.loginOrLogout }}</li>
+        <li @click="redirectPage('/')">Home</li>
+        <li @click="redirectPage('personnages')">Personnages</li>
+        <li v-if="isConnected" @click="logout()"> Se déconnecter </li>
+        <li v-else @click="login()"> Se connecter </li>
       </ul>
     </nav>
   </div>
@@ -28,17 +29,25 @@ import LoginView from './views/LoginView.vue';
 export default {
     data() {
         return {
-            loginOrLogout: undefined
+            loginOrLogout: undefined,
+            isConnected: false
         };
     },
     methods : {
+      redirectPage (route) {
+        this.$router.push(route)
+        console.log("rrrrr");
+      },
       receive(childData) {
-        if (childData) {
-          this.loginOrLogout = "Se déconncter"
-        } else {
-          this.loginOrLogout = "Se conncter"
-        }
-        console.log(childData); // "Hello World"
+          this.isConnected = true
+      },
+      login(){
+        this.$router.push("/login")
+      },
+      logout() {
+        localStorage.removeItem("user")
+        this.$router.push("/login")
+        this.isConnected = false;
       }
     },
     computed: {
@@ -46,13 +55,13 @@ export default {
     },
     mounted() {
         console.log("mounted");
-        if (this.userDatas == null) {
-            this.loginOrLogout = "Se connecter";
+        console.log(localStorage.getItem("user"));
+
+        if (localStorage.getItem("user") !== null) {
+          this.isConnected = true;
+        } else {
+          this.isConnected = false;
         }
-        else {
-            this.loginOrLogout = "Se déconnecter";
-        }
-        console.log(this.userDatas);
     },
     components: { LoginView }
 }

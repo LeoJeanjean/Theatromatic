@@ -28,11 +28,11 @@
       <button type="submit" class="btn btn-primary btn-ghost" @click="login()">Se connecter</button>
     </form>
 
-    <form class="login-form" action="javascript:void(0);" v-else>
+    <form class="signup-form" ref="signupFormRef" action="javascript:void(0);" v-else>
       <h1>Signup</h1>
       <div class="form-input-material">
         <label for="username">Nom</label>
-        <input type="text" name="username" id="username" placeholder=" " autocomplete="off" class="form-control-material" required v-model="nameSignup"/>
+        <input type="text" name="usernameRegister" id="usernameRegister" placeholder=" " autocomplete="off" class="form-control-material" required v-model="nameSignup"/>
       </div>
       <div class="form-input-material">
         <label for="username">Email</label>
@@ -40,12 +40,11 @@
       </div>
       <div class="form-input-material">
         <label for="password">Mot de passe</label>
-        <input type="password" name="password" id="password" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordSignup"/>
+        <input type="password" name="passwordRegister" id="passwordRegister" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordSignup"/>
       </div>
       <button type="submit" class="btn btn-primary btn-ghost" @click="signup()">S'inscrire</button>
     </form>
   </div>
-  <button @click="send">Click Me</button>
 </template>
 
 <script>
@@ -78,6 +77,10 @@ import { mapActions, mapState } from 'pinia'
         this.$emit('setCheckboxVal', this.checkbox)
       },
     async signup() {
+      if (this.nameSignup == "" || this.email == "" || this.passwordSignup == "") {
+        console.log("all fields required");
+        return;
+      }
       let newUser = new User(this.nameSignup, this.email, this.passwordSignup)
       const response = await axios.post(
         'http://localhost:3000/signup',
@@ -87,6 +90,8 @@ import { mapActions, mapState } from 'pinia'
       
       ).then((response) => {
         console.log(response);
+        this.$refs.signupFormRef.reset();
+        
       })
     },
     async login() {
@@ -99,6 +104,7 @@ import { mapActions, mapState } from 'pinia'
       ).then((response) => {
         console.log(response.data);
         this.updateUserDatas(response.data);
+        localStorage.setItem("user", JSON.stringify(response.data))
         console.log(this.userDatas);
         console.log(response.data);
         if (response.data !== false) {
@@ -113,6 +119,11 @@ import { mapActions, mapState } from 'pinia'
     computed: {
       ...mapState(useUserStore, ['userDatas'])
 
+    },
+    mounted() {
+      if (localStorage.getItem("user") !== null) {
+        this.$router.push("/")
+      }
     }
   }
 
@@ -180,6 +191,7 @@ input:checked + .slider:before {
 
 .containter-login-form {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -197,7 +209,7 @@ input:checked + .slider:before {
   color: rgb(0, 0, 0);
 }
 
-.login-form {
+.login-form, .signup-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -207,10 +219,14 @@ input:checked + .slider:before {
   border-radius: 10px;
   box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
 }
-.login-form h1 {
+.login-form h1, .signup-form h1 {
   margin: 0 0 24px 0;
 }
 .login-form .form-input-material {
+  margin: 12px 0;
+}
+
+.signup-form .form-input-material {
   margin: 12px 0;
 }
 .login-form .btn {

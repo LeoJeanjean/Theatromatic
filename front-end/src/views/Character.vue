@@ -35,10 +35,10 @@ export default  {
         ...mapState(useUserStore, ["userDatas"]),
     },
     mounted() {
-        if (this.userDatas == null) {
+        if (localStorage.getItem("user") == null) {
             this.$router.push('/login')
         }
-        console.log(this.userDatas);
+
     }
 }
 
