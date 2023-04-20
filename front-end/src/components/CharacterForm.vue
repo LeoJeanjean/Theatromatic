@@ -8,60 +8,59 @@
         class="character-form"
         >
 
-        <p>
-            <label for="name">Nom</label>
-            <input
-            id="name"
-            v-model="name"
-            type="text"
-            name="name"
-            >
-        </p>
+          <p>
+              <label for="name">Nom</label>
+              <input
+              id="name"
+              v-model="name"
+              type="text"
+              name="name"
+              >
+          </p>
 
-        <p>
-            <label for="gender">Genre</label>
-            <select v-model="gender">
-                <option disabled value="">Choisir un genre</option>
-                <option>Masculin</option>
-                <option>Feminin</option>
-            </select>
-        </p>
+          <p>
+              <label for="gender">Genre</label>
+              <select v-model="gender">
+                  <option disabled value="">Choisir un genre</option>
+                  <option>Masculin</option>
+                  <option>Feminin</option>
+              </select>
+          </p>
 
-        <p>
-            <label for="job">Fonction</label>
-            <input
-            id="job"
-            v-model="job"
-            name="job"
-            >
-        </p>
+          <p>
+              <label for="job">Fonction</label>
+              <input
+              id="job"
+              v-model="job"
+              name="job"
+              >
+          </p>
 
+          <p>
+              <label for="characteristic">Caractéristique(s)</label>
+              <textarea
+              id="characteristic"
+              v-model="characteristic"
+              rows="5" cols="33"
+              type="text"
+              name="characteristic"
+              >
+              </textarea>
+          </p>
 
-        <p>
-            <label for="characteristic">Caractéristique(s)</label>
-            <textarea
-            id="characteristic"
-            v-model="characteristic"
-            rows="5" cols="33"
-            type="text"
-            name="characteristic"
-            >
-            </textarea>
-        </p>
+          <p>
+              <input
+              type="submit"
+              value="Submit"
+              >
+          </p>
 
-        <p>
-            <input
-            type="submit"
-            value="Submit"
-            >
-        </p>
-
-        <p v-if="errors.length">
-            <b>Veuillez corriger les erreurs suivantes:</b>
-            <ul>
-            <li v-for="error in errors">{{ error }}</li>
-            </ul>
-        </p>
+          <p v-if="errors.length">
+              <b>Veuillez corriger les erreurs suivantes:</b>
+              <ul>
+                <li v-for="error in errors">{{ error }}</li>
+              </ul>
+          </p>
         </form>
     </div>
     
@@ -72,38 +71,46 @@
     export default {
     data() {
         return {
-            el: '#app',
-            errors: [],
-            name: null,
-            gender: null,
-            job: null,
-            gender: null,
-            characteristic: null
+          el: '#app',
+          errors: [],
+          name: null,
+          job: null,
+          gender: null,
+          characteristic: null
         }
     },
+    props: ['perso'],
     methods:{
         checkForm: function (e) {
-            if (this.name && this.gender && this.job) {
-                return true;
-            }
+          if (this.name && this.gender && this.job) {
+            return true;
+          }
 
-            this.errors = [];
+          this.errors = [];
 
-            if (!this.name) {
-                this.errors.push('Nom requis.');
-            }
-            if (!this.gender) {
-                this.errors.push('Genre requis.');
-            }
-            if (!this.job) {
-                this.errors.push('Fonction requis.');
-            }
+          if (!this.name) {
+            this.errors.push('Nom requis.');
+          }
+          if (!this.gender) {
+            this.errors.push('Genre requis.');
+          }
+          if (!this.job) {
+            this.errors.push('Fonction requis.');
+          }
 
-            e.preventDefault();
+          e.preventDefault();
+        }
+    },
+    watch: {
+        perso(newPerso, oldPerso) {
+            console.log(newPerso)
+            this.name = newPerso.name
+            this.gender = newPerso.gender
+            this.job = newPerso.job
+            this.characteristic = newPerso.characteristics
         }
     }
-    
-    }
+  }
 
 </script>
 
