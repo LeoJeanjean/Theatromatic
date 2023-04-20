@@ -58,11 +58,13 @@
         }, 2000);
       }
     },
-
     components: {
       FinalScene
     },
     mounted() {
+      if (localStorage.getItem("user") == null) {
+            this.$router.push('/login')
+      }
       this.setup();
       console.log(localStorage.getItem('script'));
       console.log(localStorage.getItem('persoList'));

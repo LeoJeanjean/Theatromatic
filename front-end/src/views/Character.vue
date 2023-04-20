@@ -18,7 +18,10 @@
 <script>
 
 
+import { mapState } from 'pinia';
 import CharacterForm from '../components/CharacterForm.vue'
+import useUserStore from "../stores/user";
+
 
 export default  {
     methods: {
@@ -28,6 +31,15 @@ export default  {
     components: {
         CharacterForm
     },
+    computed: {
+        ...mapState(useUserStore, ["userDatas"]),
+    },
+    mounted() {
+        if (localStorage.getItem("user") == null) {
+            this.$router.push('/login')
+        }
+
+    }
 }
 
 </script>
