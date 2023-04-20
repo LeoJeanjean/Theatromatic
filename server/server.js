@@ -52,6 +52,26 @@ async function getCharacters() {
   }
 }
 
+async function addCharacter(character) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("characters");
+
+    collection.insertOne({
+      "name" : character["name"],
+      "gender" : character["gender"],
+      "job" : character["job"],
+      "characteristics" : character["characteristics"],
+    }).finally( () => {
+      client.close();
+    });
+    console.log("inserted");
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 /// OPENAI GPT-3 QUERIES ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const { Configuration, OpenAIApi } = require("openai");
@@ -76,6 +96,12 @@ try {
     res.status(500).send('Server Error');
 }
 });
+
+app.post('/addCharacter', (req,res) => {
+  console.log(req.body["character"]["name"]);
+  addCharacter(req.body["character"]);
+  res.send('character is added');
+})
 
 app.post('/gpt', async (req, res) => {
   if(!req.body) return res.status(400).json({ success: false, error: 'You must provide a prompt' });

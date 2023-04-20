@@ -1,9 +1,9 @@
-class Character{
-	constructor(name,gender,job,caracteristics){
+export default class Character{
+	constructor(name,gender,job,characteristics){
     	this.name = name;
       	this.gender = gender;
         this.job = job;
-        this.caracteristics = caracteristics;
+        this.characteristics = characteristics;
     }
 
   	toString(){
