@@ -14,7 +14,7 @@ app.use(express.json());
 
 /// MONGO CONNECTION AND QUERIES /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(process.env.URI, {
   serverApi: {
@@ -37,19 +37,105 @@ async function run() {
 }
 run().catch(console.dir);
 
-async function getCharacters() {
+async function addUser(user) {
+  
   try {
     await client.connect();
-
     const database = client.db("database");
-    const collection = database.collection("characters");
+    const collection = database.collection("users");
 
     // Query the collection and log the result
-    const result = await collection.find().toArray();
+   // const result = await collection.findOne();
+    collection.insertOne({
+      "name" : user["name"],
+      "email" : user["email"],
+      "password" : user["password"],
+      "characters" : []
+    }).finally( () => {
+      client.close();
+    });
+    console.log("inserted");
+  } catch(e) {
+    console.log(e);
+  }
+ 
+}
+
+async function checkUserExist(inputName, inputPassword) {
+
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("users");
+    const result = await  collection.find(
+      {
+        "name" : inputName
+      }
+    ).toArray().then((userData) => {
+      if (userData.length > 0) {
+        if (userData[0]["password"] === inputPassword) {
+          return userData[0];
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+
+    })
+    return(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+async function getCharacters(charactersID) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("characters");
+    let result = [];
+    for (const characterID in charactersID) {
+      result = [...result,(await collection.find({_id: new ObjectId(charactersID[characterID])}).toArray())[0]];
+    }
     console.log(result);
     return(result);
   } finally {
     await client.close();
+  }
+}
+
+async function addCharacter(character) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collectionChar = database.collection("characters");
+    const collectionUser = database.collection("users");
+
+    const newCharacter = {
+      "name" : character["name"],
+      "gender" : character["gender"],
+      "job" : character["job"],
+      "characteristics" : character["characteristics"],
+    };
+    
+    const result = await collectionChar.insertOne(newCharacter);
+    console.log(result.insertedId + " is the id");
+
+    collectionUser.updateOne({
+      "_id" : new ObjectId(character["userID"])
+    }, {
+      $push: {
+        "characters" : result.insertedId
+      }
+    }).finally( () => {
+      client.close();
+    });
+    
+    console.log("inserted");
+  } catch(e) {
+    console.log(e);
   }
 }
 
@@ -68,15 +154,33 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
   });
   
-app.get('/characters', async (req, res) => {
+app.post('/signup', (req,res) => {
+  console.log(req.body["user"]["name"]);
+  addUser(req.body["user"]);
+  res.send('user is signup');
+})
+
+app.post('/login', async (req,res) => {
+  const connctedUser = await checkUserExist(req.body["userInput"]["name"], req.body["userInput"]["password"]);
+  res.send(connctedUser)
+})
+
+app.get('/characters/:charactersID', async (req, res) => {
 try {
-    const characters = await getCharacters();
+    charactersID = req.params.charactersID.split('-')
+    const characters = await getCharacters(charactersID);
     res.send(characters);
 } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
 }
 });
+
+app.post('/addCharacter', (req,res) => {
+  console.log(req.body["character"]["name"]);
+  addCharacter(req.body["character"]);
+  res.send('character is added');
+})
 
 app.post('/gpt', async (req, res) => {
   if(!req.body) return res.status(400).json({ success: false, error: 'You must provide a prompt' });

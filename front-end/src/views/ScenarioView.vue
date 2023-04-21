@@ -24,19 +24,29 @@ export default {
   }),
   methods: {
     submit() {
-      this.persoInScenar = ''
+      this.persoInScenar = []
       for (const index in this.persoList) {
         if (this.persoList[index].inScenar === true) {
-          this.persoInScenar += this.persoList[index]._id + "-"
+          this.persoInScenar.push(this.persoList[index])
         }
       }
-      this.persoInScenar = this.persoInScenar.slice(0,-1)
-      router.push({ name: 'scene', params: {personnage: this.persoInScenar, script: this.script}})
+      localStorage.setItem('script', this.script)
+      localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
+      router.push({ name: 'scene'})
     }
   },
-  async created() {
+  async mounted() {
+    const charactersID = JSON.parse(localStorage.getItem('user')).characters
+    let IDs = ''
+    for (let i = 0; i < charactersID.length; i++) {
+      if (i+1 === charactersID.length) {
+        IDs += charactersID[i]
+      } else {
+        IDs += charactersID[i]+'-'
+      }
+    }
     await axios.get(
-        'http://localhost:3000/characters',
+        'http://localhost:3000/characters/'+IDs,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -53,7 +63,6 @@ export default {
         )
       }
     })
-    console.log(this.persoList)
   }
 }
 </script>

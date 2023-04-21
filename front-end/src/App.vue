@@ -1,17 +1,87 @@
 <script setup>
 import { RouterView } from 'vue-router'
+
+
 </script>
 
 <template>
-  <RouterView />
+
+  <div style="background-color: antiquewhite;">
+    <nav>
+      <ul class="nav-elements">
+        <li @click="redirectPage('/')">Home</li>
+        <li @click="redirectPage('personnages')">Personnages</li>
+        <li v-if="isConnected" @click="logout()"> Se déconnecter </li>
+        <li v-else @click="login()"> Se connecter </li>
+      </ul>
+    </nav>
+  </div>
+  <RouterView @send="receive"/>
+
+  
 </template>
+
+<script>
+import useUserStore from "./stores/user";
+import { mapState } from 'pinia';
+import LoginView from './views/LoginView.vue';
+
+export default {
+    data() {
+        return {
+            loginOrLogout: undefined,
+            isConnected: false
+        };
+    },
+    methods : {
+      redirectPage (route) {
+        this.$router.push(route)
+        console.log("rrrrr");
+      },
+      receive(childData) {
+          this.isConnected = true
+      },
+      login(){
+        this.$router.push("/login")
+      },
+      logout() {
+        localStorage.removeItem("user")
+        this.$router.push("/login")
+        this.isConnected = false;
+      }
+    },
+    computed: {
+        ...mapState(useUserStore, ["userDatas"]),
+    },
+    mounted() {
+        console.log("mounted");
+        console.log(localStorage.getItem("user"));
+
+        if (localStorage.getItem("user") !== null) {
+          this.isConnected = true;
+        } else {
+          this.isConnected = false;
+        }
+    },
+    components: { LoginView }
+}
+</script>
 
 <style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
 }
+.nav-elements {
+  display: flex;
+  list-style-type: none;
+  justify-content: flex-end;
+}
 
+.nav-elements > li {
+  margin-right: 10px;
+  cursor: pointer;
+}
 .logo {
   display: block;
   margin: 0 auto 2rem;
@@ -21,7 +91,7 @@ nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
+  height: 40px;
 }
 
 nav a.router-link-exact-active {
