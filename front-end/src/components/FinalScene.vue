@@ -118,12 +118,9 @@
           console.log(JSON.parse(this.scenarioText)[i]);
         }
         this.createDivText(scenar[scenar.length - 1])
-        // create for end
+
         await sleep(1000)
       }
-
-      // selection pixabay plutôt que random image
-
 
   },mounted() {
       this.original = document.getElementById('text-id')      
