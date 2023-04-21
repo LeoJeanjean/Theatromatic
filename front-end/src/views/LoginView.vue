@@ -6,7 +6,6 @@
     <div class="panel panel-default ">
     
     <div class="panel-body">  
-      <!--Only code you need is this label-->
       <label class="switch">
         <input type="checkbox" @click="toggleCheckbox">
         <div class="slider round"></div>
