@@ -27,7 +27,15 @@ export default {
       this.persoInScenar = []
       for (const index in this.persoList) {
         if (this.persoList[index].inScenar === true) {
-          this.persoInScenar.push(this.persoList[index])
+          this.persoInScenar.push(
+              {
+                _id: this.persoList[index]._id,
+                name: this.persoList[index].name,
+                gender: this.persoList[index].gender,
+                job: this.persoList[index].job,
+                caracteristics: this.persoList[index].caracteristics
+              }
+          )
         }
       }
       localStorage.setItem('script', this.script)
@@ -53,7 +61,18 @@ export default {
           },
         }
     ).then((response) => {
-      this.persoList = response.data
+      for (const index in response.data) {
+        this.persoList.push(
+            {
+              _id: response.data[index]._id,
+              name: response.data[index].name,
+              gender: response.data[index].gender,
+              job: response.data[index].job,
+              caracteristics: response.data[index].caracteristics,
+              InScenar: false
+            }
+        )
+      }
     })
   }
 }
