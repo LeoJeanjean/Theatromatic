@@ -53,15 +53,7 @@ export default {
           },
         }
     ).then((response) => {
-      for (const index in response.data) {
-        this.persoList.push(
-            {
-              _id: response.data[index]._id,
-              name: response.data[index].name,
-              InScenar: false
-            }
-        )
-      }
+      this.persoList = response.data
     })
   }
 }
