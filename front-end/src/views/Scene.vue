@@ -67,8 +67,12 @@
       }
       this.setup();
       console.log(localStorage.getItem('script'));
-      console.log(localStorage.getItem('persoList'));
-    }  
+      console.log(JSON.parse(localStorage.getItem('persoList')));
+    },
+    beforeUnmount() {
+      localStorage.removeItem('script')
+      localStorage.removeItem('persoList')
+    }
   }
 
 </script>

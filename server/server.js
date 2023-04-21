@@ -73,7 +73,7 @@ async function checkUserExist(inputName, inputPassword) {
       }
     ).toArray().then((userData) => {
       if (userData.length > 0) {
-        if (userData[0]["password"] == inputPassword) {
+        if (userData[0]["password"] === inputPassword) {
           return userData[0];
         } else {
           return false;
@@ -90,15 +90,15 @@ async function checkUserExist(inputName, inputPassword) {
 }
 
 
-async function getCharacters() {
+async function getCharacters(charactersID) {
   try {
     await client.connect();
-
     const database = client.db("database");
     const collection = database.collection("characters");
-
-    // Query the collection and log the result
-    const result = await collection.find().toArray();
+    let result = [];
+    for (const characterID in charactersID) {
+      result = [...result,(await collection.find({_id: new ObjectId(charactersID[characterID])}).toArray())[0]];
+    }
     console.log(result);
     return(result);
   } finally {
@@ -165,9 +165,10 @@ app.post('/login', async (req,res) => {
   res.send(connctedUser)
 })
 
-app.get('/characters', async (req, res) => {
+app.get('/characters/:charactersID', async (req, res) => {
 try {
-    const characters = await getCharacters();
+    charactersID = req.params.charactersID.split('-')
+    const characters = await getCharacters(charactersID);
     res.send(characters);
 } catch (err) {
     console.error(err);
