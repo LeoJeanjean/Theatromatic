@@ -45,15 +45,14 @@
             rows="5" cols="33"
             type="text"
             name="characteristic"
+            placeholder="Grand, sournois, diabolique, avec un pistolet, etc..."
+            style="resize: none;"
             >
             </textarea>
         </p>
 
         <p>
-            <input
-            type="submit"
-            value="Submit"
-            >
+            <button on@click:checkForm>Submit</button> 
         </p>
 
         <p v-if="errors.length">
@@ -64,12 +63,14 @@
         </p>
         </form>
     </div>
-    
-
 </template>
 
 <script>
-    export default {
+
+import Character from "../models/Character.js"
+import axios from "axios"
+
+export default {
     data() {
         return {
             el: '#app',
@@ -84,7 +85,7 @@
     methods:{
         checkForm: function (e) {
             if (this.name && this.gender && this.job) {
-                return true;
+                this.createNewCharacter(this.name,this.gender,this.job,this.characteristic);
             }
 
             this.errors = [];
@@ -100,10 +101,23 @@
             }
 
             e.preventDefault();
+        },
+        createNewCharacter: async function (name,gender,job,characteristics,userID) {
+            var user = JSON.parse(localStorage.getItem('user')); //retrieve the object
+            const newCharacter = new Character(name,gender,job,characteristics,user["_id"]);
+            const response = await axios.post(
+                'http://localhost:3000/addCharacter',
+                {
+                character: newCharacter,
+                },
+                {}
+            ).then((response) => {
+                console.log("C'est bon ! Perso créé");
+            })
+
         }
     }
-    
-    }
+}
 
 </script>
 
