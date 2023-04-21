@@ -38,6 +38,6 @@ div {
   align-items: center;
   gap: 8px;
   width: 100%;
-  border-bottom: black solid;
+  border: black solid;
 }
 </style>

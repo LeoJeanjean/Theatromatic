@@ -35,9 +35,18 @@ export default {
       router.push({ name: 'scene'})
     }
   },
-  async created() {
+  async mounted() {
+    const charactersID = JSON.parse(localStorage.getItem('user')).characters
+    let IDs = ''
+    for (let i = 0; i < charactersID.length; i++) {
+      if (i+1 === charactersID.length) {
+        IDs += charactersID[i]
+      } else {
+        IDs += charactersID[i]+'-'
+      }
+    }
     await axios.get(
-        'http://localhost:3000/characters',
+        'http://localhost:3000/characters/'+IDs,
         {
           headers: {
             'Content-Type': 'application/json',
