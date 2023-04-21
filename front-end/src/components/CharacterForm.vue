@@ -52,7 +52,7 @@
         </p>
 
         <p>
-            <button on@click:checkForm>Submit</button> 
+            <button @click:="checkForm">Submit</button>
         </p>
 
         <p v-if="errors.length">
@@ -71,51 +71,57 @@ import Character from "../models/Character.js"
 import axios from "axios"
 
 export default {
+    props: ['perso'],
     data() {
         return {
             el: '#app',
             errors: [],
             name: null,
-            gender: null,
             job: null,
             gender: null,
             characteristic: null
         }
     },
-    methods:{
-        checkForm: function (e) {
-            if (this.name && this.gender && this.job) {
-                this.createNewCharacter(this.name,this.gender,this.job,this.characteristic);
-            }
-
-            this.errors = [];
-
-            if (!this.name) {
-                this.errors.push('Nom requis.');
-            }
-            if (!this.gender) {
-                this.errors.push('Genre requis.');
-            }
-            if (!this.job) {
-                this.errors.push('Fonction requis.');
-            }
-
-            e.preventDefault();
-        },
-        createNewCharacter: async function (name,gender,job,characteristics,userID) {
-            var user = JSON.parse(localStorage.getItem('user')); //retrieve the object
-            const newCharacter = new Character(name,gender,job,characteristics,user["_id"]);
-            const response = await axios.post(
-                'http://localhost:3000/addCharacter',
-                {
-                character: newCharacter,
-                },
-                {}
-            ).then((response) => {
-                console.log("C'est bon ! Perso créé");
-            })
-
+    methods: {
+      checkForm: function (e) {
+        if (this.name && this.gender && this.job) {
+          this.createNewCharacter(this.name, this.gender, this.job, this.characteristic);
         }
+
+        this.errors = [];
+
+        if (!this.name) {
+          this.errors.push('Nom requis.');
+        }
+        if (!this.gender) {
+          this.errors.push('Genre requis.');
+        }
+        if (!this.job) {
+          this.errors.push('Fonction requis.');
+        }
+
+        e.preventDefault();
+      },
+      createNewCharacter: async function (name, gender, job, characteristics, userID) {
+        var user = JSON.parse(localStorage.getItem('user')); //retrieve the object
+        const newCharacter = new Character(name, gender, job, characteristics, user["_id"]);
+        const response = await axios.post(
+            'http://localhost:3000/addCharacter',
+            {
+              character: newCharacter,
+            },
+            {}
+        ).then((response) => {
+          console.log("C'est bon ! Perso créé");
+        })
+
+      },
+      change() {
+        this.name = this.perso.name
+        this.gender = this.perso.gender
+        this.job = this.perso.job
+        this.characteristic = this.perso.characteristics
+      }
     }
 }
 
@@ -130,6 +136,10 @@ export default {
     .div-form-character {
                height: 40vh;
 
+    }
+
+    p {
+      display: flex;
     }
  
 </style>

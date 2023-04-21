@@ -14,7 +14,7 @@
         <p :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></p>
       </div>
     </div>
-    <CharacterForm :perso="persoSelect" class="form"></CharacterForm>
+    <CharacterForm ref="form" :perso="persoSelect" class="form"></CharacterForm>
   </div>
 </template>
 
@@ -43,12 +43,21 @@ export default {
       this.persoSelect.gender = document.getElementById(id+'g').innerText
       this.persoSelect.job = document.getElementById(id+'j').innerText
       this.persoSelect.characteristics = document.getElementById(id+'c').innerText
-      console.log(this.persoSelect)
+      this.$refs.form.change()
     }
   },
-  async created() {
+  async mounted() {
+    const charactersID = JSON.parse(localStorage.getItem('user')).characters
+    let IDs = ''
+    for (let i = 0; i < charactersID.length; i++) {
+      if (i+1 === charactersID.length) {
+        IDs += charactersID[i]
+      } else {
+        IDs += charactersID[i]+'-'
+      }
+    }
     await axios.get(
-        'http://localhost:3000/characters',
+        'http://localhost:3000/characters/'+IDs,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -78,7 +87,7 @@ export default {
 }
 p {
   width: 25%;
-  height: 5vh;
   border: black solid;
+  margin: 0;
 }
 </style>

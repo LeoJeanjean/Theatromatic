@@ -15,14 +15,14 @@ const router = createRouter({
       name: 'login',
       component: LoginView
     },
-    {
+    /*{
       path: '/personnages',
       name: 'character',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/Character.vue')
-    },
+    },*/
     {
       path: '/about',
       name: 'about',
