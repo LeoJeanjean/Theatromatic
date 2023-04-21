@@ -33,7 +33,7 @@ export default {
                 name: this.persoList[index].name,
                 gender: this.persoList[index].gender,
                 job: this.persoList[index].job,
-                caracteristics: this.persoList[index].caracteristics
+                characteristics: this.persoList[index].characteristics
               }
           )
         }
@@ -68,7 +68,7 @@ export default {
               name: response.data[index].name,
               gender: response.data[index].gender,
               job: response.data[index].job,
-              caracteristics: response.data[index].caracteristics,
+              characteristics: response.data[index].characteristics,
               InScenar: false
             }
         )
