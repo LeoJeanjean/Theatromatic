@@ -25,6 +25,7 @@
           fast: 40,
           superFast: 10,
         },
+        chatGptRequest: `Je vais te donner un resume de texte et un ou plusieurs personnage avec des paramètre a respecter . Ecris moi un scenario  impliquant ces personnages et le resume, sous la forme suivante: [ { "begin" : phrase introductive }, { "dialogue":  replique du personnage qui parle  , "talkingCharacter" : nom du personnage qui parle  si il n'y en a pas car il s'agit jute d'une action mettre null, "action": action n'impliquant pas les répliques de personnages s'il y en a }, répéter sur ce même model à chaque fois que quelque chose de nouveau arrive comme action ou personnage prenant la parole, {"Fin": texte de fin} ]`,
         scenarioText: `
         [{"begin": "Luc était un bosseur et un rêveur qui travaillait dur pour réaliser ses aspirations."},
 {"action": "Il se levait tôt chaque matin pour aller à la salle de sport avant de se rendre à son travail dans une entreprise de technologie en plein essor."},
@@ -126,6 +127,18 @@
       this.original = document.getElementById('text-id')      
       this.timeSensativeAction();
       console.log(JSON.parse(this.scenarioText));
+      let persoList = JSON.parse(localStorage.getItem("persoList"));
+      console.log(persoList);
+      let detailScenario = "";
+      for(let i = 0; i < persoList.length; i++ ) {
+        console.log(persoList[i]["name"]);
+        detailScenario += persoList[i]["name"] + ": " + persoList[i]["gender"] + ", " + persoList[i]["job"] + ", "  + persoList[i]["characteristics"] + ". "
+      }
+      detailScenario += "\n" + localStorage.getItem("script");
+
+      this.chatGptRequest += "\n" + detailScenario;
+
+      console.log(this.chatGptRequest);
     }
   }
 
