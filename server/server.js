@@ -6,7 +6,7 @@ const cors = require('cors');
 require("dotenv").config();
 
 const corsOptions = {
-  origin: 'http://localhost:5173'
+  origin: '*'
 };
 
 app.use(cors(corsOptions));
@@ -118,6 +118,7 @@ async function addCharacter(character) {
       "gender" : character["gender"],
       "job" : character["job"],
       "characteristics" : character["characteristics"],
+      "choosenImageUrl" : character["choosenImageUrl"]
     };
     
     const result = await collectionChar.insertOne(newCharacter);
