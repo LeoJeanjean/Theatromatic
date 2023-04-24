@@ -55,6 +55,42 @@
             <button on@click:checkForm>Submit</button> 
         </p>
 
+        <p>
+            <label for="img"> Choisir une image : </label>
+            <div v-if="isItHisOwnImage">
+                <input type="text" name="img" id="img">
+            </div>
+            <div v-else>
+                <input type="text" v-model="sText" onchange='this.searchImage(e)' name="searchImg" id="searchImg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6" v-for="(image, i) in images" :key="image.id">
+                        <div class="card">
+                            <img :src="image.webformatURL" class="card-img-top" alt="">
+                            <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button class="btn btn-icon" @click="makeFav(i)">
+                                <i class="mdi mdi-heart"></i>
+                                </button>
+                                <div>{{image.likes}}</div>
+                                <button class="btn btn-icon" @click="downloadWithAxios(image.largeImageURL)">
+                                <i class="mdi mdi-download"></i>
+                                </button>
+                                <div>{{image.downloads}}</div>
+                                <button class="btn btn-icon" @click="viewImg(image.largeImageURL)">
+                                <i class="mdi mdi-eye"></i>
+                                </button>
+                                <div>{{image.views}}</div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </p>
+
         <p v-if="errors.length">
             <b>Veuillez corriger les erreurs suivantes:</b>
             <ul>
@@ -79,7 +115,11 @@ export default {
             gender: null,
             job: null,
             gender: null,
-            characteristic: null
+            characteristic: null,
+            isItHisOwnImage: false,
+            api: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c',
+            images: null,
+            sText: ''
         }
     },
     methods:{
@@ -115,7 +155,45 @@ export default {
                 console.log("C'est bon ! Perso créé");
             })
 
-        }
+        },
+        getImages: function(){
+            axios.get(this.api).then(response => {
+                this.images = response.data.hits
+            }).catch(error => (console.log(error)))
+        },
+        forceFileDownload(response){
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            var rand = Math.floor(Math.random()*999)
+            link.setAttribute('download', 'wallpep'+rand+'.png') //or any other extension
+            document.body.appendChild(link)
+            link.click()
+        },
+        downloadWithAxios(link){
+            axios({
+            method: 'get',
+            url: link,
+            responseType: 'arraybuffer'
+            })
+            .then(response => {
+            this.forceFileDownload(response)
+            })
+            .catch((errror) => console.log(errror))
+        },
+        searchImage: function(e){
+            this.sText = e.target.value
+            axios.get(this.api+'&q='+this.sText)
+            .then(response=>{
+            this.images = response.data.hits
+            })
+            .catch(error=>{
+            console.log(error)
+            })
+
+        },
+    }, mounted() {
+        this.getImages()
     }
 }
 
