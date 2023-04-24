@@ -118,6 +118,7 @@ async function addCharacter(character) {
       "gender" : character["gender"],
       "job" : character["job"],
       "characteristics" : character["characteristics"],
+      "choosenImageUrl" : character["choosenImageUrl"]
     };
     
     const result = await collectionChar.insertOne(newCharacter);
