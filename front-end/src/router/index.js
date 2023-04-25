@@ -55,6 +55,12 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/Characters.vue')
     },
+    },
+    {
+      path: '/scenegrid',
+      name: 'scenegrid',
+      component: () => import('../components/FinalSceneGrid.vue')
+    }
   ]
 })
 

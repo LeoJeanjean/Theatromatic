@@ -36,7 +36,6 @@ export default {
     methods : {
       redirectPage (route) {
         this.$router.push(route)
-        console.log("rrrrr");
       },
       receive(childData) {
           this.isConnected = true
