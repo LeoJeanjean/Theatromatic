@@ -108,7 +108,6 @@ export default {
         if (!update) {
           this.createNewCharacter()
         } else if (update && this.persoSelect._id !== '') {
-          console.log("update launch")
           this.updateCharacter()
         }
       }
@@ -139,7 +138,6 @@ export default {
       })
     },
     async updateCharacter() {
-      console.log("update launched")
       await axios.put(
           'http://localhost:3000/updateCharacter',
           {
@@ -153,7 +151,6 @@ export default {
           },
           {}
       ).then(() => {
-        console.log("update make")
         this.getCharacter()
       })
     },
