@@ -126,6 +126,25 @@ async function addCharacter(character) {
   }
 }
 
+async function updateCharacter(character) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("characters");
+    await collection.updateOne({
+      "_id" : new ObjectId(character._id)
+    }, {
+      $set: {
+        "name" : character.name,
+        "gender" : character.gender,
+        "job" : character.job,
+        "characteristics" : character.characteristics
+      }
+    });
+  } catch(e) {
+    console.log(e);
+  }
+}
 async function deleteCharacter(userID,characterID) {
   try {
     await client.connect();
@@ -185,6 +204,15 @@ app.post('/addCharacter', async (req,res) => {
   try {
     await addCharacter(req.body["character"])
     res.send('added');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+})
+app.put('/updateCharacter', async (req,res) => {
+  try {
+    await updateCharacter(req.body["character"])
+    res.send('updated');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');

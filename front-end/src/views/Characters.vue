@@ -16,11 +16,8 @@
       </div>
     </div>
     <div class="div-form-character">
-      <form
+      <div
           id="app"
-          @submit="checkForm"
-          action="https://vuejs.org/"
-          method="post"
           class="character-form"
       >
 
@@ -57,7 +54,7 @@
           <label for="characteristic">Caractéristique(s)</label>
           <textarea
               id="characteristic"
-              v-model="persoSelect.characteristic"
+              v-model="persoSelect.characteristics"
               rows="5" cols="33"
               type="text"
               name="characteristic"
@@ -68,16 +65,17 @@
         </p>
 
         <p class="input">
-          <button class="submit" type="submit" @click:="checkForm">Submit</button>
+          <button class="submit" @click="checkForm(false)">Submit</button>
+          <button class="submit" @click="checkForm(true)">Update</button>
         </p>
 
         <p class="input" v-if="errors.length">
           <b>Veuillez corriger les erreurs suivantes:</b>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
         </p>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -105,9 +103,14 @@ export default {
     errors: [],
   }),
   methods: {
-    checkForm: async function (e) {
+    checkForm: async function (update) {
       if (this.persoSelect.name && this.persoSelect.gender && this.persoSelect.job) {
-        this.createNewCharacter(this.persoSelect.name, this.persoSelect.gender, this.persoSelect.job, this.persoSelect.characteristic);
+        if (!update) {
+          this.createNewCharacter()
+        } else if (update && this.persoSelect._id !== '') {
+          console.log("update launch")
+          this.updateCharacter()
+        }
       }
 
       this.errors = [];
@@ -121,23 +124,41 @@ export default {
       if (!this.persoSelect.job) {
         this.errors.push('Fonction requis.');
       }
-
-      e.preventDefault();
     },
-    createNewCharacter: async function (name, gender, job, characteristics) {
+    createNewCharacter: async function () {
       let user = JSON.parse(localStorage.getItem('user')); //retrieve the object
-      const newCharacter = new Character(name, gender, job, characteristics, user["_id"]);
+      const newCharacter = new Character(this.persoSelect.name, this.persoSelect.gender, this.persoSelect.job, this.persoSelect.characteristics, user["_id"]);
       await axios.post(
           'http://localhost:3000/addCharacter',
           {
             character: newCharacter,
           },
           {}
-      ).then(async () => {
-        await this.getCharacter()
+      ).then(() => {
+        this.getCharacter()
+      })
+    },
+    async updateCharacter() {
+      console.log("update launched")
+      await axios.put(
+          'http://localhost:3000/updateCharacter',
+          {
+            character: {
+              _id: this.persoSelect._id,
+              name: this.persoSelect.name,
+              gender: this.persoSelect.gender,
+              job: this.persoSelect.job,
+              characteristics: this.persoSelect.characteristics
+            }
+          },
+          {}
+      ).then(() => {
+        console.log("update make")
+        this.getCharacter()
       })
     },
     selectCharacter(id) {
+      this.persoSelect._id = id
       this.persoSelect.name = document.getElementById(id+'n').innerText
       this.persoSelect.gender = document.getElementById(id+'g').innerText
       this.persoSelect.job = document.getElementById(id+'j').innerText
@@ -159,7 +180,7 @@ export default {
       await this.recupId().then(()=>{
         const charactersID = JSON.parse(localStorage.getItem('user')).characters
         this.persoList = null
-        if (charactersID !== undefined) {
+        if (charactersID !== undefined && charactersID[0] !== undefined) {
           let IDs = ''
           for (let i = 0; i < charactersID.length; i++) {
             if (i + 1 === charactersID.length) {
@@ -197,7 +218,7 @@ export default {
           }
       ).then(async (response) => {
         if (response.data) {
-          this.getCharacter()
+          await this.getCharacter()
         } else {
           console.log("erreur")
         }
