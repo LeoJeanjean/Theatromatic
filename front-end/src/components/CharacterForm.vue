@@ -52,7 +52,7 @@
         </p>
 
         <p>
-            <button @click:="checkForm">Submit</button>
+            <button type="submit" @click:="checkForm">Submit</button>
         </p>
 
         <p v-if="errors.length">
@@ -83,7 +83,7 @@ export default {
         }
     },
     methods: {
-      checkForm: function (e) {
+      checkForm: async function (e) {
         if (this.name && this.gender && this.job) {
           this.createNewCharacter(this.name, this.gender, this.job, this.characteristic);
         }
@@ -102,19 +102,16 @@ export default {
 
         e.preventDefault();
       },
-      createNewCharacter: async function (name, gender, job, characteristics, userID) {
-        var user = JSON.parse(localStorage.getItem('user')); //retrieve the object
+      createNewCharacter: async function (name, gender, job, characteristics) {
+        let user = JSON.parse(localStorage.getItem('user')); //retrieve the object
         const newCharacter = new Character(name, gender, job, characteristics, user["_id"]);
-        const response = await axios.post(
+        await axios.post(
             'http://localhost:3000/addCharacter',
             {
               character: newCharacter,
             },
             {}
-        ).then((response) => {
-          console.log("C'est bon ! Perso créé");
-        })
-
+        )
       },
       change() {
         this.name = this.perso.name
