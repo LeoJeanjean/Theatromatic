@@ -54,7 +54,6 @@ export default  {
   align-items: center;
   flex-direction: column;
   color: white;
-  overflow-y: hidden;
 }
 
 .presentation-page-character {

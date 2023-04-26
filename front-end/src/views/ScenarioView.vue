@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background display-flex">
     <h2>Nouvelle pièce</h2>
     <div class="scenarForm">
       <div class="formPart">
@@ -32,20 +32,37 @@ export default {
       this.persoInScenar = []
       for (const index in this.persoList) {
         if (this.persoList[index].inScenar === true) {
-          this.persoInScenar.push(this.persoList[index])
+          this.persoInScenar.push(
+              {
+                _id: this.persoList[index]._id,
+                name: this.persoList[index].name,
+                gender: this.persoList[index].gender,
+                job: this.persoList[index].job,
+                characteristics: this.persoList[index].characteristics
+              }
+          )
         }
       }
       localStorage.setItem('script', this.script)
-      localStorage.setItem('persoList', this.persoList)
+      localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
       router.push({ name: 'scene'})
     },
     redirectPage (route) {
       this.$router.push(route)
     }
   },
-  async created() {
+  async mounted() {
+    const charactersID = JSON.parse(localStorage.getItem('user')).characters
+    let IDs = ''
+    for (let i = 0; i < charactersID.length; i++) {
+      if (i+1 === charactersID.length) {
+        IDs += charactersID[i]
+      } else {
+        IDs += charactersID[i]+'-'
+      }
+    }
     await axios.get(
-        'http://localhost:3000/characters',
+        'http://localhost:3000/characters/'+IDs,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -57,12 +74,14 @@ export default {
             {
               _id: response.data[index]._id,
               name: response.data[index].name,
+              gender: response.data[index].gender,
+              job: response.data[index].job,
+              characteristics: response.data[index].characteristics,
               InScenar: false
             }
         )
       }
     })
-    console.log(this.persoList)
   }
 }
 </script>
@@ -82,6 +101,10 @@ export default {
   width: 90%;
   height: 80%;
 }
+.formPart character-list{
+  display: flex;
+  justify-content: space-between;
+}
 .scenarea {
   overflow-y: scroll;
   width: 100%;
@@ -97,6 +120,13 @@ export default {
   width: 100%;
   height: 100%;
   color: white;
+}
+
+.display-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
 }
 
 h2 {

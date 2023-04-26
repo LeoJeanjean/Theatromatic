@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <div class="background">
+  <div class="background flex">
     <div class="title">
       <h1>Theatromatic</h1>
       <span>Le générateur de pièce de théâtre</span>
@@ -51,11 +51,14 @@ export default {
   background: repeat url('../src/assets/Planches.png');
   width: 100%;
   height: 100%;
+  color: white;
+}
+
+.flex{
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
-  color: white;
 }
 
 .title{

@@ -42,14 +42,7 @@ export default {
         ...mapState(useUserStore, ["userDatas"]),
     },
     mounted() {
-        console.log("mounted");
-        console.log(localStorage.getItem("user"));
-
-        if (localStorage.getItem("user") !== null) {
-          this.isConnected = true;
-        } else {
-          this.isConnected = false;
-        }
+        this.isConnected = localStorage.getItem("user") !== null;
     },
     components: { LoginView }
 }
