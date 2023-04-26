@@ -9,10 +9,15 @@
         <character-list :persoList="persoList" />
       </div>
     </div>
-    <div class="buttons">
-      <input class="switch" v-model="sceneType" type="checkbox">
-      <button @click="redirectPage('/')" class="scenarBtn b1">Retour</button>
+    <div class="bottom">
+      <div class="sceneChoose">
+        <div class="b1" :class="!sceneType ? 'choose' : 'noChoose'" @click="sceneType=false">Dialogue</div>
+        <div class="b1" :class="sceneType ? 'choose' : 'noChoose'" @click="sceneType=true">Grille</div>
+      </div>
+      <div class="buttons">
+      <router-link to="/" class="scenarBtn b1">Retour</router-link>
       <button @click="submit()" class="scenarBtn b1" type="button">Créer scène</button>
+      </div>
     </div>
   </div>
 </template>
@@ -143,10 +148,43 @@ h2 {
   font-size: 48px;
 }
 
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .buttons {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
+.sceneChoose {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+}
+@keyframes choose {
+  from {filter: hue-rotate(-45deg) brightness(50%);}
+  to {filter: hue-rotate(0) brightness(100%);}
+}
+@keyframes nochoose {
+  from {filter: hue-rotate(0) brightness(100%);}
+  to {filter: hue-rotate(-45deg) brightness(50%);}
+}
+
+.choose {
+  width: 50%;
+  animation-name: choose;
+  animation-duration: 1s;
+}
+
+.noChoose {
+  width: 50%;
+  filter: hue-rotate(-45deg) brightness(50%);
+  animation-name: nochoose;
+  animation-duration: 1s;
+}
 </style>
