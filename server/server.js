@@ -43,9 +43,6 @@ async function addUser(user) {
     await client.connect();
     const database = client.db("database");
     const collection = database.collection("users");
-
-    // Query the collection and log the result
-   // const result = await collection.findOne();
     collection.insertOne({
       "name" : user["name"],
       "email" : user["email"],
@@ -54,11 +51,9 @@ async function addUser(user) {
     }).finally( () => {
       client.close();
     });
-    console.log("inserted");
   } catch(e) {
     console.log(e);
   }
- 
 }
 
 async function checkUserExist(inputName, inputPassword) {
@@ -89,7 +84,6 @@ async function checkUserExist(inputName, inputPassword) {
   }
 }
 
-
 async function getCharacters(charactersID) {
   try {
     await client.connect();
@@ -97,12 +91,11 @@ async function getCharacters(charactersID) {
     const collection = database.collection("characters");
     let result = [];
     for (const characterID in charactersID) {
-      result = [...result,(await collection.find({_id: new ObjectId(charactersID[characterID])}).toArray())[0]];
+      result = [...result, (await collection.find({_id: new ObjectId(charactersID[characterID])}).toArray())[0]];
     }
-    console.log(result);
     return(result);
-  } finally {
-    await client.close();
+  } catch(err) {
+    console.log(err)
   }
 }
 
@@ -122,19 +115,52 @@ async function addCharacter(character) {
     };
     
     const result = await collectionChar.insertOne(newCharacter);
-    console.log(result.insertedId + " is the id");
-
     collectionUser.updateOne({
       "_id" : new ObjectId(character["userID"])
     }, {
       $push: {
         "characters" : result.insertedId
       }
-    }).finally( () => {
-      client.close();
+    })
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+async function updateCharacter(character) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collection = database.collection("characters");
+    await collection.updateOne({
+      "_id" : new ObjectId(character._id)
+    }, {
+      $set: {
+        "name" : character.name,
+        "gender" : character.gender,
+        "job" : character.job,
+        "characteristics" : character.characteristics,
+        "choosenImageUrl" : character.choosenImageUrl
+      }
     });
-    
-    console.log("inserted");
+  } catch(e) {
+    console.log(e);
+  }
+}
+async function deleteCharacter(userID,characterID) {
+  try {
+    await client.connect();
+    const database = client.db("database");
+    const collectionChar = database.collection("characters");
+    const collectionUser = database.collection("users");
+    await collectionChar.deleteOne({_id: new ObjectId(characterID)});
+    await collectionUser.updateOne({
+      "_id" : new ObjectId(userID)
+    }, {
+      $pull: {
+        "characters" : new ObjectId(characterID)
+      }
+    });
   } catch(e) {
     console.log(e);
   }
@@ -156,7 +182,6 @@ app.get('/', (req, res) => {
   });
   
 app.post('/signup', (req,res) => {
-  console.log(req.body["user"]["name"]);
   addUser(req.body["user"]);
   res.send('user is signup');
 })
@@ -167,20 +192,42 @@ app.post('/login', async (req,res) => {
 })
 
 app.get('/characters/:charactersID', async (req, res) => {
-try {
-    charactersID = req.params.charactersID.split('-')
+  try {
+    const charactersID = req.params.charactersID.split('-')
     const characters = await getCharacters(charactersID);
     res.send(characters);
-} catch (err) {
+  } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
-}
+  }
 });
 
-app.post('/addCharacter', (req,res) => {
-  console.log(req.body["character"]["name"]);
-  addCharacter(req.body["character"]);
-  res.send('character is added');
+app.post('/addCharacter', async (req,res) => {
+  try {
+    await addCharacter(req.body["character"])
+    res.send('added');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+})
+app.put('/updateCharacter', async (req,res) => {
+  try {
+    await updateCharacter(req.body["character"])
+    res.send('updated');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+})
+app.delete('/deleteCharacter/:userID/:characterID', (req,res) => {
+  try {
+    deleteCharacter(req.params.userID,req.params.characterID);
+    res.send("deleted");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
 })
 
 app.post('/gpt', async (req, res) => {
