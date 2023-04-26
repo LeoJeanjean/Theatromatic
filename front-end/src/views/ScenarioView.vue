@@ -115,13 +115,6 @@ export default {
   font-size: 24px;
 }
 
-.background{
-  background: repeat url('../src/assets/Planches.png');
-  width: 100%;
-  height: 100%;
-  color: white;
-}
-
 .display-flex {
   display: flex;
   justify-content: center;
