@@ -43,7 +43,6 @@
         {"action": "Jean grimpa à l'arbre et aida le garçon à descendre en toute sécurité."},
         {"dialogue": "Merci beaucoup les gars, vous êtes des héros !", "talkingCharacter": "Le petit garçon"},
         {"Fin": "Luc réalisa qu'il pouvait être à la fois un bosseur et un rêveur tout en étant un héros pour quelqu'un d'autre."}]
-
           `,
         textLines: [
           {speed: 10, string: "Oh, hello!", character: "Tom"},
