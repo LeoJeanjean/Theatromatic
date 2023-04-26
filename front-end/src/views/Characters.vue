@@ -4,7 +4,7 @@
     <div class="display-flex container">
       <div style="overflow: scroll;">
         <table class="charaList">
-          <tr style="position:sticky;top:0px;z-index: 1;">
+          <tr style="position:sticky;top:0;z-index: 1;">
             <th class="case">Nom</th>
             <th class="case">Genre</th>
             <th class="case">Métier</th>
@@ -18,8 +18,10 @@
             <td :id="perso._id+'j'">{{ perso.job }}</td>
             <td :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></td>
             <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl" alt="aucune image sélectionnée"/></td>
-            <td class="flex-column"><button class="edit" @click="selectCharacter(perso._id)" title="Modifier le personnage">|</button>
-                                    <button class="suppr" @click="deleteCharacter(perso._id)" title="Supprimer le personnage">X</button></td>
+            <td class="flex-column">
+              <button class="edit" @click="selectCharacter(perso._id)" title="Modifier le personnage">|</button>
+              <button class="suppr" @click="deleteConfirm(perso._id,perso.name)" title="Supprimer le personnage">X</button>
+            </td>
           </tr>
         </table>
       </div>
@@ -110,6 +112,14 @@
     </div>
     <button @click="redirectPage('/')" class="scenarBtn b1">Retour</button>
   </div>
+  <div :class="confirm ? 'show' : 'hide'">
+    <div class="confirm">
+    Vous allez supprimez {{persoDelete.name}}.
+    Êtes vous sûr ?
+    <button class="b1" @click="confirm = false">Non</button>
+    <button class="b1" @click="deleteCharacter(persoDelete._id)">Oui</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -132,6 +142,10 @@ export default {
       characteristics:'',
       choosenImageUrl: null
     },
+    persoDelete: {
+      _id:'',
+      name:''
+    },
     errors: [],
     isItHisOwnImage: false,
     api: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c&safesearch=true&image_type=illustration&image_type=vector&per_page=200',
@@ -139,6 +153,7 @@ export default {
     sText: '',
     showDialog: false,
     created: false,
+    confirm: false
   }),
   methods: {
     checkForm: async function (update) {
@@ -245,6 +260,11 @@ export default {
         }
       })
     },
+    deleteConfirm(id,name) {
+      this.confirm = true
+      this.persoDelete._id = id
+      this.persoDelete.name = name
+    },
     async deleteCharacter(id) {
       const userId = JSON.parse(localStorage.getItem('user'))._id
       await axios.delete(
@@ -257,6 +277,9 @@ export default {
       ).then(async (response) => {
         if (response.data) {
           await this.getCharacter()
+          this.persoDelete._id = ''
+          this.persoDelete.name = ''
+          this.confirm = false
         } else {
           console.log("erreur")
         }
@@ -362,7 +385,7 @@ export default {
   color: black;
   background-color: white;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-right: 10%;
 }
 .character-form p {
@@ -400,5 +423,34 @@ export default {
 
 h2 {
   font-size: 48px;
-} 
+}
+.confirm {
+  background-color: white;
+  border-radius: 8px;
+}
+.show {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.50);
+  opacity: 1;
+}
+.hide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -5;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+}
 </style>
