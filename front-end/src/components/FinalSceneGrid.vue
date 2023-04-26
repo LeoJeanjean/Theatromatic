@@ -18,60 +18,21 @@
 export default {
     data() {
         return {
-            scenario: `FIREPLACE,1(2;2)#TABLES,4(3;6)(7;6)(3;11)(7;11)#
-
-(Scene starts with Bebo and Jeanne entering the Inn, they look around and head towards a table near the fireplace)
-
-@BEBO#RT#7;4#Finally, we found shelter for the night.
-@JEANNE#LT#3;4#Don't get too comfortable, Bebo. We're still in enemy territory.
-@BEBO#RT#7;4#Pfft, nothing can stand in my way. Not even those damn orcs.
-@JEANNE#LT#3;4#You're going to get us killed, Bebo. We need to be cautious.
-@BEBO#RT#7;4#I'm not afraid of anything. Bring on the danger!
-
-(The Innkeeper approaches their table)
-
-@INNKEEPER#RT#9;8#What can I get for you, travelers?
-@JEANNE#LT#3;4#Just some water for me, please.
-@BEBO#RT#7;4#Ale for me. Make it two!
-
-(The Innkeeper nods and leaves to get their order. As they wait, a group of orcs enters the Inn and heads towards their table)
-
-@ORC_LEADER#RT#7;14#Well, well, well. Look who we have here.
-@BEBO#RT#7;4#I was wondering when you cowards would show up.
-@JEANNE#LT#3;4#Bebo, please, let's just leave.
-
-(The orcs draw their weapons and surround Bebo and Jeanne)
-
-@ORC_LEADER#RT#7;14#Hand over the witch, and we'll let you live.
-@BEBO#RT#7;4#You'll have to go through me first!
-
-(A fight ensues between Bebo and the orcs. Bebo fights bravely but is outnumbered. Jeanne uses her magic to help him)
-
-@JEANNE#LT#3;4#Take this, you foul creatures!
-
-(Jeanne casts a spell, and the orcs are knocked out. Bebo looks at her with admiration)
-
-@BEBO#RT#7;4#You saved my life, Jeanne. I won't forget this.
-@JEANNE#LT#3;4#Let's go. We need to keep moving.
-
-(Bebo and Jeanne exit the Inn, leaving the unconscious orcs behind)
-
-#END_SCENE`,
-                        wholeScenario: []
-
+            scenario: `
+            [{"s": {"Bebo": [0, 3], "Jeanne": [4, 3]}}, {"b": "Bebo et Jeanne se font face, prêts à se battre."}, {"d": "Je vais te battre sans aucune difficulté !", "t": "Bebo", "p": [0, 3, "Bebo"]}, {"d": "Je ne crains personne, je suis la plus puissante des sorcières !", "t": "Jeanne", "p": [4, 3, "Jeanne"]}, {"a": "Bebo s'élance vers Jeanne pour l'attaquer.", "p": [0, 3, "Bebo"]}, {"a": "Jeanne lève sa baguette magique et lance un sortilège sur Bebo.", "p": [4, 3, "Jeanne"]}, {"d": "Aïe ! Qu'est-ce que tu m'as fait ?!", "t": "Bebo", "p": [0, 3, "Bebo"]}, {"d": "Je t'avais prévenu, tu n'es pas de taille contre moi !", "t": "Jeanne", "p": [4, 3, "Jeanne"]}, {"E": "Bebo s'enfuit, vaincu, laissant Jeanne triomphante."}]
+            `
         }
     }, 
     methods: {
         initGrid() {
             const container = document.querySelector('.grille');
             container.setAttribute("class", "grille container");
-            const row = 16;
-            const col = 10;
+            const row = 8;
+            const col = 5;
             for(let i = 0; i < row*col; i++) {
                 let gridCase = document.createElement('div');
                 const rowIndex = Math.floor(i / col);
                 const colIndex = i % col;
-                // console.log(rowIndex, colIndex);
                 gridCase.classList.add("case")
                 gridCase.classList.add("c"+colIndex +"r"+rowIndex )
                 container.appendChild(gridCase);
@@ -83,120 +44,103 @@ export default {
                 gridCase.appendChild(divimg)
             }
         },
-        parseScene(sceneText) {
-            const lines = sceneText.split("@");
-            return lines;
-        },
-        parseScenario() {
-            const scenes = this.parseScene(this.scenario);
-            const scenes2 = [];
-            scenes.forEach(element => {
-                if(scenes.indexOf(element) === 0){
-                    element.split("(").forEach(element => {
-                        var elt = element;
-                        elt.replace("\n", "");
-                        elt.replace(")", "");
-                        const eltArray = elt.split("#");
-                        scenes2.push(eltArray);
-                        console.log(scenes2);
-                    })
-                    var elt = element.split("#")
-                    scenes2.push(elt);
-                }else{
-                    element.split("(").forEach(element => {
-                        var elt = element;
-                        elt.replace("\n", "");
-                        elt.replace(")", "");
-                        const eltArray = elt.split("#");
-                        scenes2.push(eltArray); 
-                    })
-                }; 
-            });
-            console.log(scenes2);
-
-            this.createText(scenes2);
-        },
-        createText(scenesScript) {
-
-
-            let bool = false;
-            let k  = 0;
-            let firstSetupNumber;
-
-
             
-            for (let index = 0; index < scenesScript.length; index++) {
-                const element = scenesScript[index];
-
-                if (element.length == 1 && element.includes(",")) {
-                    console.log("innnn");
-                    let firstSetup = element.split(',');
-                    firstSetupNumber = parseInt(firstSetup[1]);
-                    bool = true;
-                }
-                console.log(firstSetupNumber);
-
-                if (bool) {
-                    k++;
-                }
-            }
-
-
-
-            for (let index = 0; index < scenesScript.length; index++) {
-                const element = scenesScript[index];
-
-                if (element.length == 4) {
-
-                    let characterSpeaking = {
-                        speakingChar : element[0],
-                        position: element[2],
-                        text: element[3]
-                    }
-
-                    this.wholeScenario.push(characterSpeaking)
-
-                } else if (element.length == 1) {
-
-                    if (/[a-z]/.test(element[0])) {
-                        let narration = {
-                            speakingChar : null,
-                            text: element[0]
-                        }
-                        this.wholeScenario.push(narration)
-                    } else {
-                        // console.log('The string does not contain any lowercase characters.');
-                    }
-
-                }                
-            }
-
-        console.log(this.wholeScenario);
-        },
         async createScene() {
-            let speakingCharText = document.querySelector('.span-speaking-char')
-            let spanText = document.querySelector('.span-text');
+
+            let parsedScenario = JSON.parse(this.scenario);
+            console.log(parsedScenario);
+
+            let charcterSpeech = document.querySelector('.span-text');
+            let characterText = document.querySelector('.span-speaking-char');
 
             const sleep = (milliseconds) => {
                 return new Promise(resolve => setTimeout(resolve, milliseconds))
             }
 
-            for (let index = 0; index < this.wholeScenario.length; index++) {
-                
-                const element = this.wholeScenario[index];
-                let getCell;
-                let getImgCell;
-                if (element["position"]) {
-                    let splitPos = element["position"].split(";")
-                    getCell = document.querySelector('.c'+ splitPos[0] + "r" + splitPos[1]);
-                    getImgCell = document.querySelector('.c'+ splitPos[0] + "r" + splitPos[1] + "img");                   
-                    getImgCell.setAttribute('src', "https://pixabay.com/get/g9c0ad61b74493d09df7e320ecfe090126a53e7b3184d1ceac6892d7e0543938710e49bb05c3e13854109133b69793d40ed74781c3876ecd8f6f9e83ff3e88c9e_1280.png");
-                }
-                speakingCharText.innerHTML = element["speakingChar"];
-                spanText.innerHTML = element["text"];
-                await sleep(2000)
+            // {"s": {"Bebo": [0, 3], "Jeanne": [4, 3]}}
 
+
+    
+            // TODO : check if it is a character or item
+
+            console.log(parsedScenario[0]);
+            const itemOrCharcater = parsedScenario[0]["s"];
+            console.log(itemOrCharcater);
+
+            for (let j = 0; j  < Object.keys(itemOrCharcater).length; j++) {
+                const element = Object.keys(itemOrCharcater)[j];
+                console.log(itemOrCharcater[element]);
+                let getImgCell = document.querySelector('.c'+itemOrCharcater[element][0]+"r"+itemOrCharcater[element][1]+"img")
+                getImgCell.setAttribute("src", "https://cdn.pixabay.com/photo/2023/04/24/02/51/crimson-rosella-7947000_1280.jpg")
+                
             }
+                
+            console.log(Object.keys(itemOrCharcater));
+
+
+            // {"b": "Bebo et Jeanne se font face, prêts à se battre."}
+            // {"E": "Bebo s'enfuit, vaincu, laissant Jeanne triomphante."}
+
+
+            charcterSpeech.innerHTML = parsedScenario[1]["b"];
+           
+            await sleep(2000)
+
+
+            for (let i = 2; i < parsedScenario.length - 1 ; i++) {
+                
+                const scenarioLine = parsedScenario[i];
+                
+                console.log();
+                if (scenarioLine["d"]) {
+                    // {"d": "Je vais te battre sans aucune difficulté !", "t": "Bebo", "p": [0, 3, "Bebo"]}
+                    if (scenarioLine["p"]){ 
+                        let getImgCell = document.querySelector('.c'+scenarioLine["p"][0]+"r"+scenarioLine["p"][1]+"img")
+                        getImgCell.setAttribute("src", "https://cdn.pixabay.com/photo/2013/07/12/19/16/battle-axe-154454_1280.png")
+                    }
+
+
+                    characterText.innerHTML = scenarioLine["t"];
+                    charcterSpeech.innerHTML = scenarioLine["d"];
+                
+                    
+                    await sleep(2000)
+
+                    // {"d": "Je n'en suis pas si sûre, Bebo. Mes pouvoirs de sorcière sont puissants aujourd'hui!", "t": "Jeanne", "p": [4, 7, "Jeanne"]},
+                    // {"a": "Bebo appuie frénétiquement sur les boutons de sa manette tandis que Jeanne agite sa baguette magique en faisant des incantations."},
+
+                    // <div class="container-speak">
+                    //     <div class="speaking-char">
+                    //         <span class="span-speaking-char"></span>
+                    //     </div>
+                    //     <div class="text-speaking-char">
+                    //         <span class="span-text"></span>
+                    //     </div>
+                    // </div>
+
+
+
+                } else {
+                    //                           {"a": "Jeanne esquive l'attaque de Bebo et lui jette un sort.", "p": [0, 5, "Jeanne"]},
+                    if (scenarioLine["p"]){ 
+                        let getImgCell = document.querySelector('.c'+scenarioLine["p"][0]+"r"+scenarioLine["p"][1]+"img")
+                        getImgCell.setAttribute("src", "https://cdn.pixabay.com/photo/2013/07/13/11/43/boxing-158519_1280.png")
+                    } 
+                    
+                    characterText.innerHTML = "";
+                    charcterSpeech.innerHTML = scenarioLine["a"];
+                    
+                    await sleep(2000)
+                }
+
+
+
+                
+            }
+
+            charcterSpeech.innerHTML = parsedScenario[parsedScenario.length -1]["E"];
+
+
         }
         
 
@@ -204,7 +148,6 @@ export default {
     }, 
     mounted() {
         this.initGrid();
-        this.parseScenario();
         this.createScene();
     }
 }
@@ -259,8 +202,8 @@ export default {
 
     .container {
         display: grid;
-        grid-row: 16;
-        grid-template-columns: repeat(10, minmax(0,1fr));
+        grid-row: 8;
+        grid-template-columns: repeat(5, minmax(0,1fr));
         grid-gap: 0px;
     }
 
@@ -268,7 +211,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid rgb(101, 9, 175);
+        /* border: 1px solid rgb(101, 9, 175); */
         width: 100%;
         height: 100%;
     }
