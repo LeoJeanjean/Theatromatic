@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background display-flex">
     <h2>Nouvelle pièce</h2>
     <div class="scenarForm">
       <div class="formPart">
@@ -118,6 +118,10 @@ export default {
   width: 90%;
   height: 80%;
 }
+.formPart character-list{
+  display: flex;
+  justify-content: space-between;
+}
 .scenarea {
   overflow-y: scroll;
   width: 100%;
@@ -128,11 +132,11 @@ export default {
   font-size: 24px;
 }
 
-.background{
-  background: repeat url('../src/assets/Planches.png');
-  width: 100%;
-  height: 100%;
-  color: white;
+.display-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
 }
 
 h2 {
