@@ -1,7 +1,7 @@
 <template>
   <div class="charaList">
     <div @click="check(perso._id)" v-for="perso in persoList">
-        {{ perso.name }}
+        <span>{{ perso.name }}</span>
         <input @click="check(perso._id)" :id="perso._id" v-model="perso.inScenar" class="check" type="checkbox" />
     </div>
   </div>
@@ -27,17 +27,19 @@ export default {
   flex-direction: column;
   justify-content: start;
   gap: 0;
-  height: 70%;
   width: 90%;
+  height: 80%;
   background-color: white;
   overflow-y: scroll;
+  cursor: pointer;
 }
 div {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
   width: 100%;
   border: black solid;
+  padding: 2px;
 }
 </style>

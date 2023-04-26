@@ -1,12 +1,23 @@
 <template>
-  <div class="upClap"><div class="motifClap"></div></div>
-  <div class="scenarForm">
-    <div class="formPart">
-    <textarea v-model="script" class="scenarea" />
+  <div class="background display-flex">
+    <h2>Nouvelle pièce</h2>
+    <div class="scenarForm">
+      <div class="formPart">
+        <textarea v-model="script" class="scenarea" placeholder="Ils arrivent dans une forêt..."></textarea>
+      </div>
+      <div class="formPart">
+        <character-list :persoList="persoList" />
+      </div>
     </div>
-    <div class="formPart">
-      <character-list :persoList="persoList" />
-      <button @click="submit()" class="scenarBtn" type="button">Créer scène</button>
+    <div class="bottom">
+      <div class="sceneChoose">
+        <div class="b1" :class="!sceneType ? 'choose' : 'noChoose'" @click="sceneType=false">Dialogue</div>
+        <div class="b1" :class="sceneType ? 'choose' : 'noChoose'" @click="sceneType=true">Grille</div>
+      </div>
+      <div class="buttons">
+      <router-link to="/" class="scenarBtn b1">Retour</router-link>
+      <button @click="submit()" class="scenarBtn b1" type="button">Créer scène</button>
+      </div>
     </div>
   </div>
 </template>
@@ -19,6 +30,7 @@ export default {
   name: "ScenarioView",
   components: {CharacterList},
   data: () => ({
+    sceneType: false,
     persoList: [],
     script: ''
   }),
@@ -33,14 +45,31 @@ export default {
                 name: this.persoList[index].name,
                 gender: this.persoList[index].gender,
                 job: this.persoList[index].job,
-                characteristics: this.persoList[index].characteristics
+                characteristics: this.persoList[index].characteristics,
+                choosenImageUrl: this.persoList[index].choosenImageUrl
               }
           )
         }
       }
       localStorage.setItem('script', this.script)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
-      router.push({ name: 'scene'})
+      if (this.sceneType) {
+        router.push({name: 'scenegrid'})
+      } else {
+        router.push({name: 'scene'})
+      }
+    },
+    check() {
+      this.sceneType = !this.sceneType
+      if (this.sceneType) {
+        const slider = document.getElementsByClassName('customSlider')[0]
+        slider.className = 'customSlider check'
+        slider.innerHTML = 'Grille'
+      } else {
+        const slider = document.getElementsByClassName('customSlider')[0]
+        slider.className = 'customSlider uncheck'
+        slider.innerHTML = 'Dialogue'
+      }
     }
   },
   async mounted() {
@@ -69,6 +98,7 @@ export default {
               gender: response.data[index].gender,
               job: response.data[index].job,
               characteristics: response.data[index].characteristics,
+              choosenImageUrl: response.data[index].choosenImageUrl,
               InScenar: false
             }
         )
@@ -80,28 +110,81 @@ export default {
 
 <style scoped>
 .scenarForm {
+  color: black;
   display: flex;
-  align-items: center;
-  height: 90vh;
+  height: 70%;
+  width: 60%;
 }
 .formPart {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100%;
-  width: 100%;
+  width: 90%;
+  height: 80%;
+}
+.formPart character-list{
+  display: flex;
+  justify-content: space-between;
 }
 .scenarea {
-  width: 90%;
-  height: 90%;
   overflow-y: scroll;
+  width: 100%;
+  height: 80%;
 }
 .scenarBtn {
-  height: 20%;
-  width: 90%;
+  width: 20%;
   font-size: 24px;
-  background-color: white;
-  border-style: none;
+}
+
+.display-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+}
+
+h2 {
+  font-size: 48px;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sceneChoose {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+}
+@keyframes choose {
+  from {filter: hue-rotate(-45deg) brightness(50%);}
+  to {filter: hue-rotate(0) brightness(100%);}
+}
+@keyframes nochoose {
+  from {filter: hue-rotate(0) brightness(100%);}
+  to {filter: hue-rotate(-45deg) brightness(50%);}
+}
+
+.choose {
+  width: 50%;
+  animation-name: choose;
+  animation-duration: 1s;
+}
+
+.noChoose {
+  width: 50%;
+  filter: hue-rotate(-45deg) brightness(50%);
+  animation-name: nochoose;
+  animation-duration: 1s;
 }
 </style>

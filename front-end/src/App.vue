@@ -5,17 +5,6 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-
-  <div style="background-color: antiquewhite;">
-    <nav>
-      <ul class="nav-elements">
-        <li @click="redirectPage('/')">Home</li>
-        <li @click="redirectPage('personnages')">Personnages</li>
-        <li v-if="isConnected" @click="logout()"> Se déconnecter </li>
-        <li v-else @click="login()"> Se connecter </li>
-      </ul>
-    </nav>
-  </div>
   <RouterView @send="receive"/>
 
   

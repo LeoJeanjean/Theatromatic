@@ -51,7 +51,7 @@
     width: 50%;
     height: 100%;
     filter: brightness(180%);
-    background-image: url("https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/0xPgM5l/red-curtain-in-theatre-in-theatre_m147ib7l_thumbnail-1080_01.png"); /* https://s3-us-west-2.amazonaws.com/s.cdpn.io/950358/curtain.svg */
+    background-image: url("curtain.png"); /* https://s3-us-west-2.amazonaws.com/s.cdpn.io/950358/curtain.svg */
     background-size: cover;
     background-repeat: no-repeat;
 }

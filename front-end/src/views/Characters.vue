@@ -1,37 +1,42 @@
 <template>
-  <div class="display-flex">
-    <div class="charaList">
-      <div class="charaRow">
-        <p class="case">Nom</p>
-        <p class="case">Genre</p>
-        <p class="case">Métier</p>
-        <p class="case">Caractéristiques</p>
-        <p class="case">Image</p>
+  <div class="background">
+    <h2>Vos personnages</h2>
+    <div class="display-flex container">
+      <div style="overflow: scroll;">
+        <table class="charaList">
+          <tr style="position:sticky;top:0px;z-index: 1;">
+            <th class="case">Nom</th>
+            <th class="case">Genre</th>
+            <th class="case">Métier</th>
+            <th class="case">Caractéristiques</th>
+            <th class="case">Image</th>
+            <th class="case">__</th>
+          </tr>
+          <tr v-if="persoList !== null" v-for="perso in persoList">
+            <td :id="perso._id+'n'">{{ perso.name }}</td>
+            <td :id="perso._id+'g'">{{ perso.gender }}</td>
+            <td :id="perso._id+'j'">{{ perso.job }}</td>
+            <td :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></td>
+            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl" alt="aucune image sélectionnée"/></td>
+            <td class="flex-column"><button class="edit" @click="selectCharacter(perso._id)" title="Modifier le personnage">|</button>
+                                    <button class="suppr" @click="deleteCharacter(perso._id)" title="Supprimer le personnage">X</button></td>
+          </tr>
+        </table>
       </div>
-      <div v-if="persoList !== null" @click="selectCharacter(perso._id)" class="charaRow" v-for="perso in persoList">
-        <p class="case" :id="perso._id+'n'">{{ perso.name }}</p>
-        <p class="case" :id="perso._id+'g'">{{ perso.gender }}</p>
-        <p class="case" :id="perso._id+'j'">{{ perso.job }}</p>
-        <p class="case" :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></p>
-        <img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl" alt="aucune image sélectionnée"/>
-        <button class="suppr" @click="deleteCharacter(perso._id)">X</button>
-      </div>
-    </div>
-    <div class="div-form-character">
       <div
-          id="app"
           class="character-form"
       >
-        <p class="input">
+        <p>
           <label for="name">Nom</label>
           <input
               id="name"
               v-model="persoSelect.name"
               type="text"
               name="name"
+              placeholder="Jean-Michel"
           >
         </p>
-        <p class="input">
+        <p>
           <label for="gender">Genre</label>
           <select v-model="persoSelect.gender">
             <option disabled value="">Choisir un genre</option>
@@ -39,12 +44,13 @@
             <option>Feminin</option>
           </select>
         </p>
-        <p class="input">
+        <p>
           <label for="job">Fonction</label>
           <input
               id="job"
               v-model="persoSelect.job"
               name="job"
+              placeholder="Charpentier"
           >
         </p>
         <p class="input display-flex">
@@ -54,12 +60,12 @@
               v-model="persoSelect.characteristics"
               rows="5" cols="33"
               name="characteristic"
-              placeholder="Grand, sournois, diabolique, avec un pistolet, etc..."
+              placeholder="Grand, sournois, diabolique, avec un pistolet..."
               style="resize: none;"
           >
             </textarea>
         </p>
-        <p class="input">
+        <p>
           <label for="img"> Choisir une image : </label>
           <input v-model="persoSelect.choosenImageUrl" type="text" name="img" id="img">
         <div>
@@ -87,18 +93,22 @@
           </div>
         </div>
         </p>
-        <p class="input">
-          <button class="submit" @click="checkForm(false)">Submit</button>
-          <button class="submit" @click="checkForm(true)">Update</button>
+        <p>
+          <button class="submit" @click="checkForm(false)">Ajouter</button>
+          <button class="submit" @click="checkForm(true)">Modifier</button>
         </p>
-        <p class="input" v-if="errors.length">
+        <p v-if="errors.length">
           <b>Veuillez corriger les erreurs suivantes:</b>
           <ul>
             <li v-for="error in errors">{{ error }}</li>
           </ul>
         </p>
+        <p v-else-if="created">
+          <b>Personnage ajouté / modifié.</b>
+        </p>
       </div>
     </div>
+    <button @click="redirectPage('/')" class="scenarBtn b1">Retour</button>
   </div>
 </template>
 
@@ -122,13 +132,13 @@ export default {
       characteristics:'',
       choosenImageUrl: null
     },
-    el: '#app',
     errors: [],
     isItHisOwnImage: false,
     api: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c&safesearch=true&image_type=illustration&image_type=vector&per_page=200',
     images: null,
     sText: '',
     showDialog: false,
+    created: false,
   }),
   methods: {
     checkForm: async function (update) {
@@ -148,6 +158,9 @@ export default {
       }
       if (!this.persoSelect.job) {
         this.errors.push('Fonction requis.');
+      }
+      if(this.errors.length === 0) {
+        this.created = true;
       }
     },
     createNewCharacter: async function () {
@@ -285,6 +298,9 @@ export default {
     },
     chooseThisImage(imageUrl) {
       this.persoSelect.choosenImageUrl = imageUrl;
+    },
+    redirectPage (route) {
+      this.$router.push(route)
     }
   },
   async mounted() {
@@ -296,47 +312,93 @@ export default {
 
 <style scoped>
 .charaList {
-  display: flex;
-  flex-direction: column;
-  width: 50vw;
-  height: 100vh;
+  height: 70%;
   overflow-y: scroll;
   color: white;
+  margin-left: 10%;
 }
-.charaRow {
-  display: flex;
+
+.charaList img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.charaList tr {
+  background: white;
+  color: black;
+}
+
 .case {
-  width: 19%;
+  width: 20%;
   margin: 0;
   border: white solid;
   background-color: grey;
 }
 .suppr {
-  width: 5%;
   padding: 0;
   background-color: red;
   border: solid white;
   text-align: center;
   font-weight: bold;
+  height: 50%;
+  cursor:pointer;
+}
+.edit {
+  padding: 0;
+  background-color: green;
+  border: solid white;
+  text-align: center;
+  font-weight: bold;
+  height: 50%;
+  cursor:pointer;
 }
 .character-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: 50vw;
-  color: white;
+  width: 30%;
+  color: black;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-right: 10%;
 }
-.input {
+.character-form p {
   display: flex;
-  gap: 8px;
-  color: white;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
 }
+
 .display-flex {
   display: flex;
+  justify-content: center;
+}
+
+.container {
+  height: 80vh;
+}
+
+.flex-column {
+  display:flex;
+  flex-direction: column;
+  font-family: 'YosterIsland';
+  height: 100%;
 }
 .dialog {
   color: black
 }
+
+.background {
+  background: repeat url('../src/assets/Planches.png');
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+h2 {
+  font-size: 48px;
+} 
 </style>

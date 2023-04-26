@@ -1,49 +1,47 @@
 <template>
+    <div class="containter-login-form">
 
+      <div class="panel panel-default ">
+      
+      <div class="panel-body">  
+        <label class="switch">
+          <input type="checkbox" @click="toggleCheckbox">
+          <div class="slider round"></div>
+        </label>
 
-  <div class="containter-login-form">
-
-    <div class="panel panel-default ">
-    
-    <div class="panel-body">  
-      <label class="switch">
-        <input type="checkbox" @click="toggleCheckbox">
-        <div class="slider round"></div>
-      </label>
-
+      </div>
     </div>
-  </div>
 
-    <form class="login-form" action="javascript:void(0);" v-if="this.checkbox">
-      <h1>Login</h1>
-      <div class="form-input-material">
-        <label for="username">Nom</label>
-        <input type="text" name="username" id="username" placeholder=" " autocomplete="off" class="form-control-material" required v-model="nameLogin"/>
-      </div>
-      <div class="form-input-material">
-        <label for="password">Mot de passe</label>
-        <input type="password" name="password" id="password" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordLogin" />
-      </div>
-      <button type="submit" class="btn btn-primary btn-ghost" @click="login()">Se connecter</button>
-    </form>
+      <form class="login-form" action="javascript:void(0);" v-if="this.checkbox">
+        <h1 style="text-align: center;">Connexion</h1>
+        <div class="form-input-material">
+          <label for="username">Nom</label>
+          <input type="text" name="username" id="username" placeholder=" " autocomplete="off" class="form-control-material" required v-model="nameLogin"/>
+        </div>
+        <div class="form-input-material">
+          <label for="password">Mot de passe</label>
+          <input type="password" name="password" id="password" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordLogin" />
+        </div>
+        <button type="submit" class="btn b1 btn-ghost" @click="login()">Se connecter</button>
+      </form>
 
-    <form class="signup-form" ref="signupFormRef" action="javascript:void(0);" v-else>
-      <h1>Signup</h1>
-      <div class="form-input-material">
-        <label for="username">Nom</label>
-        <input type="text" name="usernameRegister" id="usernameRegister" placeholder=" " autocomplete="off" class="form-control-material" required v-model="nameSignup"/>
-      </div>
-      <div class="form-input-material">
-        <label for="username">Email</label>
-        <input type="text" name="username" id="username" placeholder=" " autocomplete="off" class="form-control-material" required v-model="email"/>
-      </div>
-      <div class="form-input-material">
-        <label for="password">Mot de passe</label>
-        <input type="password" name="passwordRegister" id="passwordRegister" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordSignup"/>
-      </div>
-      <button type="submit" class="btn btn-primary btn-ghost" @click="signup()">S'inscrire</button>
-    </form>
-  </div>
+      <form class="signup-form" ref="signupFormRef" action="javascript:void(0);" v-else>
+        <h1 style="text-align: center;">Inscription</h1>
+        <div class="form-input-material">
+          <label for="username">Nom</label>
+          <input type="text" name="usernameRegister" id="usernameRegister" placeholder=" " autocomplete="off" class="form-control-material" required v-model="nameSignup"/>
+        </div>
+        <div class="form-input-material">
+          <label for="username">Email</label>
+          <input type="text" name="username" id="username" placeholder=" " autocomplete="off" class="form-control-material" required v-model="email"/>
+        </div>
+        <div class="form-input-material">
+          <label for="password">Mot de passe</label>
+          <input type="password" name="passwordRegister" id="passwordRegister" placeholder=" " autocomplete="off" class="form-control-material" required v-model="passwordSignup"/>
+        </div>
+        <button type="submit" class="btn b1 btn-ghost" @click="signup()">S'inscrire</button>
+      </form>
+    </div>
 </template>
 
 <script>
@@ -194,13 +192,18 @@ input:checked + .slider:before {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #eceffc;
+  background: repeat url('../src/assets/Planches.png');
+  width: 100%;
+  height: 100%;
+  color: white;
 }
 
 .btn {
   padding: 8px 20px;
   border-radius: 0;
   overflow: hidden;
+  position: absolute;
+  bottom: 20px;
 }
 
 
@@ -213,9 +216,11 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: center;
   padding: 50px 40px;
-  color: white;
-  background: rgba(0, 0, 0, 0.8);
+  color: black;
+  background: white;
   border-radius: 10px;
+  height: 60%;
+  width: 40%;
   box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
 }
 .login-form h1, .signup-form h1 {
@@ -228,9 +233,11 @@ input:checked + .slider:before {
 .signup-form .form-input-material {
   margin: 12px 0;
 }
-.login-form .btn {
-  width: 100%;
-  margin: 18px 0 9px 0;
+
+.login-form div, .signup-form div{
+  display: flex;
+  flex-direction: column;
+
 }
 
 </style>
