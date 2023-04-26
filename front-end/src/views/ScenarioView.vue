@@ -6,6 +6,10 @@
     </div>
     <div class="formPart">
       <character-list :persoList="persoList" />
+      <div class="sceneChoose" @click="check">
+        <input class="switch" v-model="sceneType" type="checkbox">
+        <div class="customSlider">Dialogue</div>
+      </div>
       <button @click="submit()" class="scenarBtn" type="button">Créer scène</button>
     </div>
   </div>
@@ -19,6 +23,7 @@ export default {
   name: "ScenarioView",
   components: {CharacterList},
   data: () => ({
+    sceneType: false,
     persoList: [],
     script: ''
   }),
@@ -33,14 +38,31 @@ export default {
                 name: this.persoList[index].name,
                 gender: this.persoList[index].gender,
                 job: this.persoList[index].job,
-                characteristics: this.persoList[index].characteristics
+                characteristics: this.persoList[index].characteristics,
+                choosenImageUrl: this.persoList[index].choosenImageUrl
               }
           )
         }
       }
       localStorage.setItem('script', this.script)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
-      router.push({ name: 'scene'})
+      if (this.sceneType) {
+        router.push({name: 'about'})
+      } else {
+        router.push({name: 'scene'})
+      }
+    },
+    check() {
+      this.sceneType = !this.sceneType
+      if (this.sceneType) {
+        const slider = document.getElementsByClassName('customSlider')[0]
+        slider.className = 'customSlider check'
+        slider.innerHTML = 'Grille'
+      } else {
+        const slider = document.getElementsByClassName('customSlider')[0]
+        slider.className = 'customSlider uncheck'
+        slider.innerHTML = 'Dialogue'
+      }
     }
   },
   async mounted() {
@@ -69,6 +91,7 @@ export default {
               gender: response.data[index].gender,
               job: response.data[index].job,
               characteristics: response.data[index].characteristics,
+              choosenImageUrl: response.data[index].choosenImageUrl,
               InScenar: false
             }
         )
@@ -92,16 +115,55 @@ export default {
   height: 100%;
   width: 100%;
 }
+.sceneChoose {
+  height: 10%;
+  width: 90%;
+  background-color: grey;
+  border: solid black;
+}
+.switch {
+  opacity: 0;
+  position: absolute;
+}
+@keyframes uncheck {
+  0% {left: 50%;color:white;}
+  40% {left: 30%; width: 20%;color:white;}
+  100% {left: 0;width: 50%;color:black;}
+}
+@keyframes check {
+  0% {left: 0;color:white;}
+  40% {left:50% ;width: 20%;color:white;}
+  100% {width: 50%;color:black;}
+}
+.customSlider {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 50%;
+  background-color: white;
+}
+.uncheck {
+  left: 0;
+  animation-name: uncheck;
+  animation-duration: 1s;
+}
+.check {
+  left: 50%;
+  animation-name: check;
+  animation-duration: 1s;
+}
 .scenarea {
   width: 90%;
   height: 90%;
   overflow-y: scroll;
 }
 .scenarBtn {
-  height: 20%;
+  height: 10%;
   width: 90%;
   font-size: 24px;
   background-color: white;
-  border-style: none;
+  border: solid black;
 }
 </style>
