@@ -139,7 +139,8 @@ async function updateCharacter(character) {
         "name" : character.name,
         "gender" : character.gender,
         "job" : character.job,
-        "characteristics" : character.characteristics
+        "characteristics" : character.characteristics,
+        "choosenImageUrl" : character.choosenImageUrl
       }
     });
   } catch(e) {
