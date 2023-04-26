@@ -47,7 +47,7 @@ export default {
       localStorage.setItem('script', this.script)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
       if (this.sceneType) {
-        router.push({name: 'about'})
+        router.push({name: 'scenegrid'})
       } else {
         router.push({name: 'scene'})
       }
