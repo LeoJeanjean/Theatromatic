@@ -1,12 +1,17 @@
 <template>
-  <div class="upClap"><div class="motifClap"></div></div>
-  <div class="scenarForm">
-    <div class="formPart">
-    <textarea v-model="script" class="scenarea" />
+  <div class="background">
+    <h2>Nouvelle pièce</h2>
+    <div class="scenarForm">
+      <div class="formPart">
+        <textarea v-model="script" class="scenarea" placeholder="Ils arrivent dans une forêt..."></textarea>
+      </div>
+      <div class="formPart">
+        <character-list :persoList="persoList" />
+      </div>
     </div>
-    <div class="formPart">
-      <character-list :persoList="persoList" />
-      <button @click="submit()" class="scenarBtn" type="button">Créer scène</button>
+    <div class="buttons">
+      <button @click="redirectPage('/')" class="scenarBtn b1">Retour</button>
+      <button @click="submit()" class="scenarBtn b1" type="button">Créer scène</button>
     </div>
   </div>
 </template>
@@ -33,6 +38,9 @@ export default {
       localStorage.setItem('script', this.script)
       localStorage.setItem('persoList', this.persoList)
       router.push({ name: 'scene'})
+    },
+    redirectPage (route) {
+      this.$router.push(route)
     }
   },
   async created() {
@@ -61,28 +69,44 @@ export default {
 
 <style scoped>
 .scenarForm {
+  color: black;
   display: flex;
-  align-items: center;
-  height: 90vh;
+  height: 70%;
+  width: 60%;
 }
 .formPart {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100%;
-  width: 100%;
+  width: 90%;
+  height: 80%;
 }
 .scenarea {
-  width: 90%;
-  height: 90%;
   overflow-y: scroll;
+  width: 100%;
+  height: 80%;
 }
 .scenarBtn {
-  height: 20%;
-  width: 90%;
+  width: 20%;
   font-size: 24px;
-  background-color: white;
-  border-style: none;
 }
+
+.background{
+  background: repeat url('../src/assets/Planches.png');
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+h2 {
+  font-size: 48px;
+} 
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 </style>

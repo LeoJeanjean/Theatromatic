@@ -50,7 +50,7 @@
         </p>
 
         <p>
-            <input
+            <input class="b1 b1plus"
             type="submit"
             value="Submit"
             >
@@ -114,8 +114,12 @@
     }
 
     .div-form-character {
-               height: 40vh;
+        height: 40vh;
+    }
 
+    .b1plus {
+        width: fit-content;
+        margin: 20px auto 20px auto ;
     }
  
 </style>
