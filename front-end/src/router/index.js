@@ -16,36 +16,24 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/personnages',
-      name: 'character',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Character.vue')
-    },
-    {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
     {
       path: '/scene',
       name: 'scene',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Scene.vue')
     },
     {
       path: '/scenario',
       name: 'scenario',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/ScenarioView.vue')
+    },
+    {
+      path: '/personnages',
+      name: 'personnages',
+      component: () => import('../views/Characters.vue')
     },
     {
       path: '/scenegrid',

@@ -5,17 +5,6 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-
-  <div style="background-color: antiquewhite;">
-    <nav>
-      <ul class="nav-elements">
-        <li @click="redirectPage('/')">Home</li>
-        <li @click="redirectPage('personnages')">Personnages</li>
-        <li v-if="isConnected" @click="logout()"> Se déconnecter </li>
-        <li v-else @click="login()"> Se connecter </li>
-      </ul>
-    </nav>
-  </div>
   <RouterView @send="receive"/>
 
   
@@ -53,14 +42,7 @@ export default {
         ...mapState(useUserStore, ["userDatas"]),
     },
     mounted() {
-        console.log("mounted");
-        console.log(localStorage.getItem("user"));
-
-        if (localStorage.getItem("user") !== null) {
-          this.isConnected = true;
-        } else {
-          this.isConnected = false;
-        }
+        this.isConnected = localStorage.getItem("user") !== null;
     },
     components: { LoginView }
 }

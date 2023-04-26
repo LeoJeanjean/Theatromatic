@@ -86,7 +86,7 @@
 
 
         <p>
-            <button on@click:checkForm>Submit</button> 
+            <button on@click:checkForm class="b1 b1plus">Submit</button> 
         </p>
         <p v-if="errors.length">
             <b>Veuillez corriger les erreurs suivantes:</b>
@@ -215,9 +215,16 @@ export default {
         flex-wrap: wrap;
     }
 
+    .div-form-character {
+        height: 40vh;
+    }
     .card {
         width: 33%;
+    }
 
+    .b1plus {
+        width: fit-content;
+        margin: 20px auto 20px auto ;
     }
     .card-img {
         width: 71%;

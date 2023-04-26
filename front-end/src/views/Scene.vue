@@ -1,5 +1,5 @@
 <template>
-  <div class="background" v-if="this.preparation"></div>
+  <div class="scene-background" v-if="this.preparation"></div>
   <div class="container-scene-page">
     <transition name="fade">
       <div class="container-curtain" v-if="this.preparation">
@@ -85,7 +85,7 @@
     height: 100%;
   }
 
-  .background {
+  .scene-background {
     position: fixed;
     width: 100vw;
     height: 100vh;
