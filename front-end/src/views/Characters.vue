@@ -1,5 +1,5 @@
 <template>
-  <div class="charaPage">
+  <div class="display-flex">
     <div class="charaList">
       <div class="charaRow">
         <p class="case">Nom</p>
@@ -63,7 +63,7 @@
           <label for="img"> Choisir une image : </label>
           <input v-model="persoSelect.choosenImageUrl" type="text" name="img" id="img">
         <div>
-          <button @click="showDialog = true">Ouvrir la librarie d'image</button>
+          <button @click="showDialog = true">Ouvrir la librairie d'image</button>
           <div v-if="showDialog">
             <div class="overlay"></div>
             <div class="dialog">
@@ -139,9 +139,7 @@ export default {
           this.updateCharacter()
         }
       }
-
       this.errors = [];
-
       if (!this.persoSelect.name) {
         this.errors.push('Nom requis.');
       }
@@ -153,7 +151,7 @@ export default {
       }
     },
     createNewCharacter: async function () {
-      let user = JSON.parse(localStorage.getItem('user')); //retrieve the object
+      let user = JSON.parse(localStorage.getItem('user'));
       const newCharacter = new Character(this.persoSelect.name, this.persoSelect.gender, this.persoSelect.job, this.persoSelect.characteristics, user["_id"], this.persoSelect.choosenImageUrl);
       await axios.post(
           'http://localhost:3000/addCharacter',
@@ -274,10 +272,9 @@ export default {
           .then(response => {
             this.forceFileDownload(response)
           })
-          .catch((errror) => console.log(errror))
+          .catch((error) => console.log(error))
     },
     searchImage: function(){
-
       axios.get(this.api+'&q='+this.sText)
           .then(response=>{
             this.images = response.data.hits
@@ -285,7 +282,6 @@ export default {
           .catch(error=>{
             console.log(error)
           })
-
     },
     chooseThisImage(imageUrl) {
       this.persoSelect.choosenImageUrl = imageUrl;
@@ -299,9 +295,6 @@ export default {
 </script>
 
 <style scoped>
-.charaPage {
-  display: flex;
-}
 .charaList {
   display: flex;
   flex-direction: column;
