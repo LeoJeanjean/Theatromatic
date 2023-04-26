@@ -1,7 +1,7 @@
 @import './base.css';
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'YosterIsland', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -14,4 +14,31 @@ body {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+}
+
+.b1 {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  background: url("Planche1.png") no-repeat scroll 0 0 transparent;
+  background-size: 100% 80%;
+  background-position-y: center;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+  border-style: none;
+  font-family: 'YosterIsland';
+  cursor: pointer;
+}
+
+.b2 {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  background: url("Planche2.png") no-repeat scroll 0 0 transparent;
+  background-size: 100% 80%;
+  background-position-y: center;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
 }

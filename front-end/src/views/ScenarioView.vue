@@ -1,16 +1,18 @@
 <template>
-  <div class="upClap"><div class="motifClap"></div></div>
-  <div class="scenarForm">
-    <div class="formPart">
-    <textarea v-model="script" class="scenarea" />
-    </div>
-    <div class="formPart">
-      <character-list :persoList="persoList" />
-      <div class="sceneChoose" @click="check">
-        <input class="switch" v-model="sceneType" type="checkbox">
-        <div class="customSlider">Dialogue</div>
+  <div class="background">
+    <h2>Nouvelle pièce</h2>
+    <div class="scenarForm">
+      <div class="formPart">
+        <textarea v-model="script" class="scenarea" placeholder="Ils arrivent dans une forêt..."></textarea>
       </div>
-      <button @click="submit()" class="scenarBtn" type="button">Créer scène</button>
+      <div class="formPart">
+        <character-list :persoList="persoList" />
+      </div>
+    </div>
+    <div class="buttons">
+      <input class="switch" v-model="sceneType" type="checkbox">
+      <button @click="redirectPage('/')" class="scenarBtn b1">Retour</button>
+      <button @click="submit()" class="scenarBtn b1" type="button">Créer scène</button>
     </div>
   </div>
 </template>
@@ -103,67 +105,44 @@ export default {
 
 <style scoped>
 .scenarForm {
+  color: black;
   display: flex;
-  align-items: center;
-  height: 90vh;
+  height: 70%;
+  width: 60%;
 }
 .formPart {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100%;
-  width: 100%;
-}
-.sceneChoose {
-  height: 10%;
   width: 90%;
-  background-color: grey;
-  border: solid black;
-}
-.switch {
-  opacity: 0;
-  position: absolute;
-}
-@keyframes uncheck {
-  0% {left: 50%;color:white;}
-  40% {left: 30%; width: 20%;color:white;}
-  100% {left: 0;width: 50%;color:black;}
-}
-@keyframes check {
-  0% {left: 0;color:white;}
-  40% {left:50% ;width: 20%;color:white;}
-  100% {width: 50%;color:black;}
-}
-.customSlider {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 50%;
-  background-color: white;
-}
-.uncheck {
-  left: 0;
-  animation-name: uncheck;
-  animation-duration: 1s;
-}
-.check {
-  left: 50%;
-  animation-name: check;
-  animation-duration: 1s;
+  height: 80%;
 }
 .scenarea {
-  width: 90%;
-  height: 90%;
   overflow-y: scroll;
+  width: 100%;
+  height: 80%;
 }
 .scenarBtn {
-  height: 10%;
-  width: 90%;
+  width: 20%;
   font-size: 24px;
-  background-color: white;
-  border: solid black;
 }
+
+.background{
+  background: repeat url('../src/assets/Planches.png');
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+h2 {
+  font-size: 48px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 </style>
