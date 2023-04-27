@@ -30,7 +30,19 @@ body {
   border-style: none;
   font-family: 'YosterIsland';
   cursor: pointer;
+  line-height: 2;
 }
+.b1:hover {
+  cursor: pointer;
+  color: #ececec;
+  transform: translateY(-1px);
+}
+.b1:active {
+  cursor: pointer;
+  color: #d0d0d0;
+  transform: translateY(1px);
+}
+
 
 .b2 {
   color: white;
@@ -40,11 +52,21 @@ body {
   background-size: 100% 80%;
   background-position-y: center;
   padding: 15px;
-  margin: 15px;
+  margin: 5px;
   text-align: center;
   font-family: 'YosterIsland';
   cursor: pointer;
   border: none;
+}
+.b2:hover {
+  cursor: pointer;
+  color: #ececec;
+  transform: translateY(-1px);
+}
+.b2:active {
+  cursor: pointer;
+  color: #d0d0d0;
+  transform: translateY(1px);
 }
 
 .b3 {
@@ -54,12 +76,22 @@ body {
   background: url("Planche3.png") no-repeat scroll 0 0 transparent;
   background-size: 100% 80%;
   background-position-y: center;
-  padding: 10px;
+  padding: 10px 20px 10px 20px;
   margin: 10px;
   text-align: center;
   font-family: 'YosterIsland';
   cursor: pointer;
   border: none;
+}
+.b3:hover {
+  cursor: pointer;
+  color: #ececec;
+  transform: translateY(-1px);
+}
+.b3:active {
+  cursor: pointer;
+  color: #d0d0d0;
+  transform: translateY(1px);
 }
 
 .background{

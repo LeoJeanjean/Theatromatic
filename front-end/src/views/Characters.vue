@@ -69,7 +69,7 @@
         </p>
         <p>
           <label for="img"> Choisir une image : </label>
-          <input v-model="persoSelect.choosenImageUrl" type="text" name="img" id="img">
+          <input v-model="persoSelect.choosenImageUrl" type="text" name="img" id="img" placeholder="URL web">
         <div>
           <button class="b3" @click="showDialog = true">Ouvrir la librairie d'image</button>
           <div v-if="showDialog">
@@ -173,6 +173,9 @@ export default {
       }
       if (!this.persoSelect.job) {
         this.errors.push('Fonction requis.');
+      }
+      if (!this.persoSelect.choosenImageUrl) {
+        this.errors.push("URL d'image requise.");
       }
     },
     createNewCharacter: async function () {
@@ -425,6 +428,9 @@ export default {
   width: 100%;
   height: 100%;
   color: white;
+}
+.background .b1 {
+  margin-top: 0px;
 }
 
 h2 {
