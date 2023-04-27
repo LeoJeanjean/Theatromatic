@@ -10,6 +10,7 @@
       </div>
     </div>
     <div class="bottom">
+      <input class="b1" v-model="sceneName">
       <div class="sceneChoose">
         <div class="b1" :class="!sceneType ? 'choose' : 'noChoose'" @click="sceneType=false">Dialogue</div>
         <div class="b1" :class="sceneType ? 'choose' : 'noChoose'" @click="sceneType=true">Grille</div>
@@ -32,7 +33,8 @@ export default {
   data: () => ({
     sceneType: false,
     persoList: [],
-    script: ''
+    script: '',
+    sceneName: ''
   }),
   methods: {
     submit() {
@@ -52,6 +54,7 @@ export default {
         }
       }
       localStorage.setItem('script', this.script)
+      localStorage.setItem('name', this.sceneName)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
       if (this.sceneType) {
         router.push({name: 'scenegrid'})
