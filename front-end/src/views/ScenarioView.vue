@@ -61,18 +61,6 @@ export default {
       } else {
         router.push({name: 'scene'})
       }
-    },
-    check() {
-      this.sceneType = !this.sceneType
-      if (this.sceneType) {
-        const slider = document.getElementsByClassName('customSlider')[0]
-        slider.className = 'customSlider check'
-        slider.innerHTML = 'Grille'
-      } else {
-        const slider = document.getElementsByClassName('customSlider')[0]
-        slider.className = 'customSlider uncheck'
-        slider.innerHTML = 'Dialogue'
-      }
     }
   },
   async mounted() {

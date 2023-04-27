@@ -76,7 +76,7 @@
         let divText = document.createElement('div');
         
         if (completeScenario["b"]) {
-          divText.innerText = completeScenario["b"];  
+          divText.innerText = completeScenario["b"];
         } else {
           divText.innerText = completeScenario["E"];
         }
@@ -90,15 +90,15 @@
         const sleep = (milliseconds) => {
           return new Promise(resolve => setTimeout(resolve, milliseconds))
         }
-      
+
         let indexOfOpenBracket = this.scenarioText.data.indexOf("[");
 
         let indexOfCloseBracket = this.scenarioText.data.lastIndexOf("]");
 
         this.scenarioText.data =  this.scenarioText.data.substring(indexOfOpenBracket, indexOfCloseBracket + 1)
-        
 
-        let scenar = JSON.parse(this.scenarioText.data); 
+
+        let scenar = JSON.parse(this.scenarioText.data);
 
         this.createDivText(scenar[1])
         for (let i = 2; i < scenar.length - 1; i++) {
@@ -114,6 +114,19 @@
   },mounted() {
       this.original = document.getElementById('text-id')      
       this.timeSensativeAction();
+      console.log(JSON.parse(this.scenarioText));
+      let persoList = JSON.parse(localStorage.getItem("persoList"));
+      console.log(persoList);
+      let detailScenario = "";
+      for(let i = 0; i < persoList.length; i++ ) {
+        console.log(persoList[i]["name"]);
+        detailScenario += persoList[i]["name"] + ": " + persoList[i]["gender"] + ", " + persoList[i]["job"] + ", "  + persoList[i]["characteristics"] + ". "
+      }
+      detailScenario += "\n" + localStorage.getItem("script");
+
+      this.chatGptRequest += "\n" + detailScenario;
+
+      console.log(this.chatGptRequest);
     }
   }
 
