@@ -233,27 +233,12 @@ app.delete('/deleteCharacter/:userID/:characterID', (req,res) => {
 app.post('/gpt', async (req, res) => {
   if(!req.body) return res.status(400).json({ success: false, error: 'You must provide a prompt' });
   try {
-    const { prompt } = req.body || "";
+    const { prompt } = req.body || "";
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `
-Je vais te donner un resume de texte et un ou plusieurs personnage avec des paramètre a respecter . Ecris moi un scenario  impliquant ces personnages et le resume, sous la forme suivante: [ {"s":  {nom du/des item(s) entre 1 et 3 et leurs nombres si plusieurs et la position initial des personnages si ils sont là dès le debut par exemple table: position dans une grille de 5 (0 à 4) par 8 (0 à 7)  },{ "b" : phrase introductive }, { "d":  replique du personnage qui parle  sans mettre son nom pour renseigner qu'il parle, "t" : nom du personnage qui parle  si il n'y en a pas car il s'agit jute d'une action mettre null, "a": action n'impliquant pas les répliques de personnages s'il y en a, "p": [position du personnage dans une grille de 5 (0 à 4) par 8 (0 à 7)  il ne peut y avoir 2 elements dans la meme position, nom du personnage positionne] comme [1,2,Bebo]}, répéter sur ce même model à chaque fois que quelque chose de nouveau arrive comme action ou personnage prenant la parole, {"E": texte de fin} ].
-Exemple: Bebo: grand, bête, brave, guerrier. Jeanne: petite, feroce, sorciere. Ils se battent dans un bar.
-[{"s": {"table": [2, 5], "Bebo": [0, 2], "Jeanne": [4, 5]}}, {"b": "Bebo et Jeanne se sont rencontrés dans un bar mal famé."},
-{"d": "Je vais te casser en deux, petit morceau de viande !", "t": "Bebo", "p": [0, 2, "Bebo"]},
-{"d": "Je ne suis pas si facilement brisable, gros tas de muscles.", "t": "Jeanne", "p": [4, 5, "Jeanne"]},
-{"a": "Bebo charge Jeanne avec toute sa force, mais Jeanne utilise sa magie pour le faire tomber par terre.", "p": [2, 2, null]},
-{"d": "Je suis impressionné, tu es plus forte que tu n'en as l'air.", "t": "Bebo", "p": [2, 2, "Bebo"]},
-{"d": "Tu as sous-estimé mes pouvoirs, Bebo.", "t": "Jeanne", "p": [4, 5, "Jeanne"]},
-{"a": "Bebo et Jeanne continuent à se battre, mais finalement Jeanne l'emporte avec un sortilège qui le transforme en souris.", "p": [2, 2, null]},
-{"d": "C'est terminé, Bebo. Tu n'es plus qu'un petit rongeur maintenant.", "t": "Jeanne", "p": [4, 5, "Jeanne"]},
-{"d": "Je me vengerai, sorcière !", "t": "Bebo (sous forme de souris)", "p": [2, 2, "Bebo"]},
-{"a": "Jeanne attrape Bebo-souris et le met dans sa poche, fière de sa victoire.", "p": [4, 5, "Jeanne"]},
-{"E": "Jeanne sort triomphante du bar, sachant qu'elle a montré sa force à tous les clients présents."}]
-Exemple plus long:
-      ${prompt}`,
-      max_tokens: 64,
-      temperature: 0,
+      prompt: `${prompt}`,
+      max_tokens: 1000,
+      temperature: 0.7,
       top_p: 1.0,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,

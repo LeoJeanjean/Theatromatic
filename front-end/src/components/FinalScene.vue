@@ -25,26 +25,6 @@
           fast: 40,
           superFast: 10,
         },
-        chatGptRequest: `Je vais te donner un resume de texte et un ou plusieurs personnage avec des paramètre a respecter . Ecris moi un scenario  impliquant ces personnages et le resume, sous la forme suivante: [ { "begin" : phrase introductive }, { "dialogue":  replique du personnage qui parle  , "talkingCharacter" : nom du personnage qui parle  si il n'y en a pas car il s'agit jute d'une action mettre null, "action": action n'impliquant pas les répliques de personnages s'il y en a }, répéter sur ce même model à chaque fois que quelque chose de nouveau arrive comme action ou personnage prenant la parole, {"Fin": texte de fin} ]`,
-        scenarioText: `
-        [{"begin": "Luc était un bosseur et un rêveur qui travaillait dur pour réaliser ses aspirations."},
-{"action": "Il se levait tôt chaque matin pour aller à la salle de sport avant de se rendre à son travail dans une entreprise de technologie en plein essor."},
-{"dialogue": "Salut Luc, tu as l'air fatigué ce matin. Tu as passé une mauvaise nuit ?", "talkingCharacter": "Louis"},
-{"dialogue": "Non, je suis juste un peu stressé. J'ai une grande présentation aujourd'hui et j'espère que tout ira bien.", "talkingCharacter": "Luc"},
-{"action": "Luc passa la journée à travailler sur sa présentation, révisant chaque détail plusieurs fois pour s'assurer qu'il n'oublierait rien."},
-{"dialogue": "Luc, ta présentation était incroyable ! Tu as vraiment impressionné tout le monde dans la salle.", "talkingCharacter": "Stéphanie"},
-{"dialogue": "Merci beaucoup Stéphanie, je suis content que tout ait bien marché.", "talkingCharacter": "Luc"},
-{"dialogue": "Hé les gars, regardez ça !", "talkingCharacter": "Jean"},
-{"action": "Jean montra un article sur son téléphone portable qui annonçait qu'un petit garçon était coincé dans un arbre près de l'entreprise."},
-{"dialogue": "Nous devons faire quelque chose pour aider ce garçon !", "talkingCharacter": "Jean"},
-{"dialogue": "Je suis d'accord, allons-y tout de suite !", "talkingCharacter": "Luc"},
-{"action": "Ils coururent tous ensemble vers l'arbre où le garçon était coincé."},
-{"dialogue": "Ne t'inquiète pas petit gars, nous allons te sortir de là.", "talkingCharacter": "Jean"},
-{"action": "Jean grimpa à l'arbre et aida le garçon à descendre en toute sécurité."},
-{"dialogue": "Merci beaucoup les gars, vous êtes des héros !", "talkingCharacter": "Le petit garçon"},
-{"Fin": "Luc réalisa qu'il pouvait être à la fois un bosseur et un rêveur tout en étant un héros pour quelqu'un d'autre."}]
-
-          `,
         textLines: [
           {speed: 10, string: "Oh, hello!", character: "Tom"},
           {speed: 10, string: "Oh, hello!", character: "Tom"},
@@ -56,6 +36,9 @@
         ]
       }
     },
+    props: {
+      scenarioText:String
+    },
     methods : {
    
       async duplicate(completeScenario) { 
@@ -63,15 +46,15 @@
         var clone = this.original.cloneNode(true);
         clone.id = "duplicater" + ++this.i;
 
-        if (completeScenario["dialogue"]) {
+        if (completeScenario["d"]) {
           let speakingCharacter = document.createElement('div');
-          speakingCharacter.innerText = completeScenario["talkingCharacter"];
+          speakingCharacter.innerText = completeScenario["t"];
           speakingCharacter.classList.add("character-talking");
           document.querySelector('.speaking-char').appendChild(speakingCharacter)
 
           let divText = document.createElement('div');
 
-          divText.innerText = completeScenario["dialogue"];
+          divText.innerText = completeScenario["d"];
           clone.appendChild(divText);
           clone.style.display = "inherit"
           this.original.parentNode.appendChild(clone);
@@ -79,7 +62,7 @@
 
           let divActionText = document.createElement('div');
 
-          divActionText.innerText = completeScenario["action"];
+          divActionText.innerText = completeScenario["a"];
           clone.appendChild(divActionText);
           clone.style.display = "inherit"
           this.original.parentNode.appendChild(clone);
@@ -92,10 +75,10 @@
 
         let divText = document.createElement('div');
         
-        if (completeScenario["begin"]) {
-          divText.innerText = completeScenario["begin"];  
+        if (completeScenario["b"]) {
+          divText.innerText = completeScenario["b"];  
         } else {
-          divText.innerText = completeScenario["Fin"];
+          divText.innerText = completeScenario["E"];
         }
         
         clone.appendChild(divText);
@@ -107,16 +90,21 @@
         const sleep = (milliseconds) => {
           return new Promise(resolve => setTimeout(resolve, milliseconds))
         }
+      
+        let indexOfOpenBracket = this.scenarioText.data.indexOf("[");
 
-        let scenar = JSON.parse(this.scenarioText); 
+        let indexOfCloseBracket = this.scenarioText.data.lastIndexOf("]");
 
-        console.log(JSON.parse(this.scenarioText));
-        this.createDivText(JSON.parse(this.scenarioText)[0])
-        for (let i = 1; i < JSON.parse(this.scenarioText).length - 1; i++) {
+        this.scenarioText.data =  this.scenarioText.data.substring(indexOfOpenBracket, indexOfCloseBracket + 1)
+        
+
+        let scenar = JSON.parse(this.scenarioText.data); 
+
+        this.createDivText(scenar[1])
+        for (let i = 2; i < scenar.length - 1; i++) {
           await sleep(2000)
 
-          this.duplicate(JSON.parse(this.scenarioText)[i])
-          console.log(JSON.parse(this.scenarioText)[i]);
+          this.duplicate(scenar[i])
         }
         this.createDivText(scenar[scenar.length - 1])
 
@@ -126,19 +114,6 @@
   },mounted() {
       this.original = document.getElementById('text-id')      
       this.timeSensativeAction();
-      console.log(JSON.parse(this.scenarioText));
-      let persoList = JSON.parse(localStorage.getItem("persoList"));
-      console.log(persoList);
-      let detailScenario = "";
-      for(let i = 0; i < persoList.length; i++ ) {
-        console.log(persoList[i]["name"]);
-        detailScenario += persoList[i]["name"] + ": " + persoList[i]["gender"] + ", " + persoList[i]["job"] + ", "  + persoList[i]["characteristics"] + ". "
-      }
-      detailScenario += "\n" + localStorage.getItem("script");
-
-      this.chatGptRequest += "\n" + detailScenario;
-
-      console.log(this.chatGptRequest);
     }
   }
 
