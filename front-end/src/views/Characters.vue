@@ -69,9 +69,9 @@
         </p>
         <p>
           <label for="img"> Choisir une image : </label>
-          <input v-model="persoSelect.choosenImageUrl" type="text" name="img" id="img">
+          <input v-model="persoSelect.choosenImageUrl" type="text" name="img" id="img" placeholder="URL web">
         <div>
-          <button @click="showDialog = true">Ouvrir la librairie d'image</button>
+          <button class="b3" @click="showDialog = true">Ouvrir la librairie d'image</button>
           <div v-if="showDialog">
             <div class="overlay"></div>
             <div class="dialog">
@@ -96,8 +96,8 @@
         </div>
         </p>
         <p>
-          <button class="submit" @click="checkForm(false)">Ajouter</button>
-          <button class="submit" v-if="persoSelect._id !== ''" @click="checkForm(true)">Modifier</button>
+          <button class="submit b2" @click="checkForm(false)">Ajouter</button>
+          <button class="submit b2" v-if="persoSelect._id !== ''" @click="checkForm(true)">Modifier</button>
         </p>
         <p v-if="errors.length">
           <b>Veuillez corriger les erreurs suivantes:</b>
@@ -173,6 +173,9 @@ export default {
       }
       if (!this.persoSelect.job) {
         this.errors.push('Fonction requis.');
+      }
+      if (!this.persoSelect.choosenImageUrl) {
+        this.errors.push("URL d'image requise.");
       }
     },
     createNewCharacter: async function () {
@@ -402,6 +405,8 @@ export default {
 .display-flex {
   display: flex;
   justify-content: center;
+  flex-direction: row;
+  align-items: stretch;
 }
 
 .container {
@@ -423,6 +428,9 @@ export default {
   width: 100%;
   height: 100%;
   color: white;
+}
+.background .b1 {
+  margin-top: 0px;
 }
 
 h2 {

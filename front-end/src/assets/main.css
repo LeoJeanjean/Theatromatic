@@ -8,6 +8,7 @@
   height: inherit;
   height: 100vh;
   width: 100%;
+  overflow: hidden;
 } 
 
 body {
@@ -29,18 +30,68 @@ body {
   border-style: none;
   font-family: 'YosterIsland';
   cursor: pointer;
+  line-height: 2;
 }
+.b1:hover {
+  cursor: pointer;
+  color: #ececec;
+  transform: translateY(-1px);
+}
+.b1:active {
+  cursor: pointer;
+  color: #d0d0d0;
+  transform: translateY(1px);
+}
+
 
 .b2 {
   color: white;
-  font-size: 20px;
+  font-size: 15px;
   text-decoration: none;
   background: url("Planche2.png") no-repeat scroll 0 0 transparent;
   background-size: 100% 80%;
   background-position-y: center;
-  padding: 20px;
-  margin: 20px;
+  padding: 15px;
+  margin: 5px;
   text-align: center;
+  font-family: 'YosterIsland';
+  cursor: pointer;
+  border: none;
+}
+.b2:hover {
+  cursor: pointer;
+  color: #ececec;
+  transform: translateY(-1px);
+}
+.b2:active {
+  cursor: pointer;
+  color: #d0d0d0;
+  transform: translateY(1px);
+}
+
+.b3 {
+  color: white;
+  font-size: 10px;
+  text-decoration: none;
+  background: url("Planche3.png") no-repeat scroll 0 0 transparent;
+  background-size: 100% 80%;
+  background-position-y: center;
+  padding: 10px 20px 10px 20px;
+  margin: 10px;
+  text-align: center;
+  font-family: 'YosterIsland';
+  cursor: pointer;
+  border: none;
+}
+.b3:hover {
+  cursor: pointer;
+  color: #ececec;
+  transform: translateY(-1px);
+}
+.b3:active {
+  cursor: pointer;
+  color: #d0d0d0;
+  transform: translateY(1px);
 }
 
 .background{
