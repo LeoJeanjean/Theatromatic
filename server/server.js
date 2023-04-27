@@ -233,15 +233,11 @@ app.delete('/deleteCharacter/:userID/:characterID', (req,res) => {
 app.post('/gpt', async (req, res) => {
   if(!req.body) return res.status(400).json({ success: false, error: 'You must provide a prompt' });
   try {
-    const { prompt } = req.body || "";
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `${prompt}`,
-      max_tokens: 1000,
-      temperature: 0.7,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0,
+    const { prompt } = req.body || "";
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo", // text-ada-001 // ft-yewg6WZh0bEPtQew3eTs5Myb
+      messages: [{"role":"user", "content": "hey"}],
+      max_tokens: 64
       //stop: ["\n"], //Le stop cause la data d'être vide si y'a pas de body !
     });
 
