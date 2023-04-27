@@ -114,7 +114,7 @@ export default {
             gender: null,
             characteristic: null,
             isItHisOwnImage: false,
-            api: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c&safesearch=true&image_type=illustration&image_type=vector&per_page=200',
+            urlImages: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c&safesearch=true&image_type=illustration&image_type=vector&per_page=200',
             images: null,
             sText: '',
             showDialog: false,
@@ -156,7 +156,7 @@ export default {
 
         },
         getImages: function(){
-            axios.get(this.api).then(response => {
+            axios.get(this.urlImages).then(response => {
                 this.images = response.data.hits
             }).catch(error => (console.log(error)))
         },
@@ -182,7 +182,7 @@ export default {
         },
         searchImage: function(){
             
-            axios.get(this.api+'&q='+this.sText)
+            axios.get(this.urlImages+'&q='+this.sText)
             .then(response=>{
             this.images = response.data.hits
             })
