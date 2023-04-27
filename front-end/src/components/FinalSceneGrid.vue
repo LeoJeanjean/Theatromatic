@@ -118,7 +118,6 @@ export default {
       async createScene() {
 
         let parsedScenario = JSON.parse(this.scenarioGrid);
-        console.log(parsedScenario);
 
         let charcterSpeech = document.querySelector('.span-text');
         let characterText = document.querySelector('.span-speaking-char');
@@ -128,16 +127,6 @@ export default {
         }
 
         const itemOrCharcater = parsedScenario[0]["s"];
-
-
-        // for (let j = 0; j < Object.keys(itemOrCharcater).length; j++) {
-        //   const element = Object.keys(itemOrCharcater)[j];
-        //   console.log(itemOrCharcater[element]);
-        //   let getImgCell = document.querySelector('.c' + itemOrCharcater[element][0] + "r" + itemOrCharcater[element][1] + "img")
-        //   this.searchImage("maison", getImgCell)
-        //   getImgCell.setAttribute("src", this.selectedImage);
-        // }
-
 
         characterText.innerHTML = ""
         charcterSpeech.innerHTML = parsedScenario[1]["b"];
@@ -149,12 +138,8 @@ export default {
 
           const scenarioLine = parsedScenario[i];
 
-          if (scenarioLine["p"]) {
-            console.log("¨¨¨¨");
-            console.log(scenarioLine["p"]);
-          }
           if (scenarioLine["d"]) {
-            console.log(scenarioLine["d"]);
+
             if (scenarioLine["p"]) {
                 
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
@@ -184,8 +169,6 @@ export default {
         axios.get(this.api + '&q=' + encodeURIComponent(sText))
             .then(response => {
               let images = response.data.hits
-              console.log(images);
-              console.log(images[this.getRandomInt(10)]["largeImageURL"]);
               this.selectedImage = images[this.getRandomInt(10)]["largeImageURL"];
               imgCell.setAttribute("src", this.selectedImage)
             })
@@ -205,13 +188,10 @@ export default {
                 if(nameCharacterOrItem == JSON.parse(this.imgs)[key]["nomPersoOuItem"]) {
 
                     for (let i = 0; i < images.length; i++) {
-
                         if (images[i].src == JSON.parse(this.imgs)[key]["url"] && images[i].className !== "c"+getImgCell[1]+"r"+getImgCell[3]) {
                             images[i].setAttribute('src',"");
                         }
                     }
-
-
 
                     getImgCell.setAttribute("src", JSON.parse(this.imgs)[key]["url"] )
                     return JSON.parse(this.imgs)[key]["url"]
@@ -270,7 +250,6 @@ export default {
 
     .grille > div {
         flex: 1 1 80px;
-        border:1px solid white;
     }
 
     .container {
@@ -284,14 +263,13 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        /* border: 1px solid rgb(101, 9, 175); */
         width: 100%;
         height: 100%;
     }
 
 
     .case {
-        border: 1px solid rgb(0, 0, 0);
+
         width: 14%;
         height: 13%;
     }
