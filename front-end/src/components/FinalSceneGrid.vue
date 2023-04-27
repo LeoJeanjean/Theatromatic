@@ -56,6 +56,7 @@ export default {
         let grid = setInterval(function () {
           this.initGrid();
           clearInterval(grid)
+          this.createScene();
         }.bind(this), 6000);
       },
       showTime() {
@@ -116,7 +117,7 @@ export default {
 
       async createScene() {
 
-        let parsedScenario = JSON.parse(this.scenario);
+        let parsedScenario = JSON.parse(this.scenarioGrid);
         console.log(parsedScenario);
 
         let charcterSpeech = document.querySelector('.span-text');
@@ -126,18 +127,16 @@ export default {
           return new Promise(resolve => setTimeout(resolve, milliseconds))
         }
 
-        // TODO : check if it is a character or item
-
         const itemOrCharcater = parsedScenario[0]["s"];
 
 
-        for (let j = 0; j < Object.keys(itemOrCharcater).length; j++) {
-          const element = Object.keys(itemOrCharcater)[j];
-          console.log(itemOrCharcater[element]);
-          let getImgCell = document.querySelector('.c' + itemOrCharcater[element][0] + "r" + itemOrCharcater[element][1] + "img")
-          this.searchImage("maison", getImgCell)
-          getImgCell.setAttribute("src", this.selectedImage);
-        }
+        // for (let j = 0; j < Object.keys(itemOrCharcater).length; j++) {
+        //   const element = Object.keys(itemOrCharcater)[j];
+        //   console.log(itemOrCharcater[element]);
+        //   let getImgCell = document.querySelector('.c' + itemOrCharcater[element][0] + "r" + itemOrCharcater[element][1] + "img")
+        //   this.searchImage("maison", getImgCell)
+        //   getImgCell.setAttribute("src", this.selectedImage);
+        // }
 
 
         charcterSpeech.innerHTML = parsedScenario[1]["b"];
@@ -148,10 +147,7 @@ export default {
         for (let i = 2; i < parsedScenario.length - 1; i++) {
 
           const scenarioLine = parsedScenario[i];
-
-          console.log();
           if (scenarioLine["d"]) {
-
             console.log(scenarioLine["d"]);
             if (scenarioLine["p"]) {
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
@@ -166,10 +162,8 @@ export default {
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
               getImgCell.setAttribute("src", "https://cdn.pixabay.com/photo/2013/07/13/11/43/boxing-158519_1280.png")
             }
-
             characterText.innerHTML = "";
             charcterSpeech.innerHTML = scenarioLine["a"];
-
             await sleep(2000)
           }
 
@@ -198,6 +192,9 @@ export default {
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
       }
+    },
+    mounted() {
+        
     }
 }
 </script>
