@@ -1,17 +1,60 @@
 <template>
-    <div class="contenu">
+  <div class="scene-background" v-if="this.preparation"></div>
+  <div class="container-scene-page">
+    <transition name="fade">
+      <div class="container-curtain" v-if="this.preparation">
+        <div id="scene">
+          <div id="curtain">
+            <h3 class="title-scene">Préparation</h3>
+            <div class="ground"></div>
+            <div class="left"></div>
+            <div class="right"></div>
+          </div>
+        </div>
+        <button id="starter" @click="startScene()"> Commencer </button>
+      </div>
+      <div v-else class="contenu">
         <div class="grille"></div>
-    </div>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-
+          preparation: true,
         }
     }, 
     methods: {
+        startScene() {
+        this.showTime()
+        let interval = setInterval(function () {
+          this.preparation = false;
+          clearInterval(interval)
+        }.bind(this), 5000);
+        let grid = setInterval(function () {
+          this.initGrid();
+          clearInterval(grid)
+        }.bind(this), 6000);
+        },
+        showTime() {
+          var curtain = document.getElementById("curtain");
+          curtain.className = "open";
+
+          var scene = document.getElementById("scene");
+          scene.className = "expand";
+
+          var starter = document.getElementById("starter");
+          starter.className = "fade-out";
+
+          let titleScene = document.querySelector('.title-scene');
+          titleScene.innerHTML = localStorage.getItem('name')
+          setTimeout(function () {
+            starter.style.display = 'none';
+          }, 2000)
+        },
         initGrid() {
             const container = document.querySelector('.grille');
             container.setAttribute("class", "grille container");
@@ -27,15 +70,15 @@ export default {
                 //divimg.appendChild(img)
                // gridCase.appendChild(divimg)
             }
+            return 'test'
         }
-    }, 
-    mounted() {
-        this.initGrid();
     }
 }
 </script>
 
 <style>
+@import '../assets/scene.css';
+@import '../assets/curtain.css';
 
     img {
         width: 30%;
@@ -71,7 +114,7 @@ export default {
         display: grid;
         grid-row: 7;
         grid-template-columns: repeat(5, minmax(0,1fr));
-        grid-gap: 0px;
+        grid-gap: 0;
     }
 
     .container > div {
@@ -88,6 +131,27 @@ export default {
         border: 1px solid rgb(0, 0, 0);
         width: 14%;
         height: 13%;
+    }
+
+    .container-scene-page {
+      width: 100%;
+      height: 100%;
+    }
+
+    .scene-background {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.5s ease;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
     }
 
 </style>
