@@ -85,8 +85,6 @@ export default {
           gridCase.appendChild(divimg)
         }
 
-        // {"s": {"arène": [2, 4], "Bob": [0, 1], "Jean": [4, 6]}}
-
         let indexOfOpenBracket = this.scenarioText.data.indexOf("[");
 
         let indexOfCloseBracket = this.scenarioText.data.lastIndexOf("]");
@@ -95,17 +93,17 @@ export default {
 
         let scenarioGridJson = JSON.parse(this.scenarioText.data);
 
-        console.log(scenarioGridJson[0]["s"]);
-
-
         for (const keyScenarioGrid in scenarioGridJson[0]["s"]) {
             let value = scenarioGridJson[0]["s"][keyScenarioGrid];
-            let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
-            for (const key in this.elementsImages) {
-                if(keyScenarioGrid == this.elementsImages[key]["name"]) {
-                    imgCase.setAttribute('src', this.elementsImages[key]["url"])
-                }                
+            if (value.length == 2) {
+                let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
+                for (const key in this.elementsImages) {
+                    if(keyScenarioGrid == this.elementsImages[key]["name"]) {
+                        imgCase.setAttribute('src', this.elementsImages[key]["url"])
+                    }                
+                }
             }
+           
 
         }
 
