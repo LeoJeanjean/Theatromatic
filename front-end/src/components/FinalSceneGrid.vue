@@ -63,6 +63,9 @@ export default {
             }
             return 'test'
         }
+    },
+    mounted() {
+      console.log(this.elementsImages)
     }
 }
 </script>
