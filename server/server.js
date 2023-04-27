@@ -233,12 +233,12 @@ app.delete('/deleteCharacter/:userID/:characterID', (req,res) => {
 app.post('/gpt', async (req, res) => {
   if(!req.body) return res.status(400).json({ success: false, error: 'You must provide a prompt' });
   try {
-    const { prompt } = req.body || "";
+    const { prompt } = req.body || "";
     const response = await openai.createCompletion({
-      model: "text-ada-001",
+      model: "text-davinci-003",
       prompt: `${prompt}`,
-      max_tokens: 64,
-      temperature: 0,
+      max_tokens: 1000,
+      temperature: 0.7,
       top_p: 1.0,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
