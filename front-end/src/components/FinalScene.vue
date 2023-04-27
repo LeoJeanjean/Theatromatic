@@ -110,13 +110,11 @@
 
         let scenar = JSON.parse(this.scenarioText); 
 
-        console.log(JSON.parse(this.scenarioText));
         this.createDivText(JSON.parse(this.scenarioText)[0])
         for (let i = 1; i < JSON.parse(this.scenarioText).length - 1; i++) {
           await sleep(2000)
 
           this.duplicate(JSON.parse(this.scenarioText)[i])
-          console.log(JSON.parse(this.scenarioText)[i]);
         }
         this.createDivText(scenar[scenar.length - 1])
 
@@ -126,19 +124,14 @@
   },mounted() {
       this.original = document.getElementById('text-id')      
       this.timeSensativeAction();
-      console.log(JSON.parse(this.scenarioText));
       let persoList = JSON.parse(localStorage.getItem("persoList"));
-      console.log(persoList);
       let detailScenario = "";
       for(let i = 0; i < persoList.length; i++ ) {
-        console.log(persoList[i]["name"]);
         detailScenario += persoList[i]["name"] + ": " + persoList[i]["gender"] + ", " + persoList[i]["job"] + ", "  + persoList[i]["characteristics"] + ". "
       }
       detailScenario += "\n" + localStorage.getItem("script");
 
       this.chatGptRequest += "\n" + detailScenario;
-
-      console.log(this.chatGptRequest);
     }
   }
 
