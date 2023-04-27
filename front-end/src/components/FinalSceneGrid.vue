@@ -1,32 +1,34 @@
 <template>
-  <div class="scene-background" v-if="this.preparation"></div>
-  <div class="container-scene-page">
-    <transition name="fade">
-      <div class="container-curtain" v-if="this.preparation">
-        <div id="scene">
-          <div id="curtain">
-            <h3 class="title-scene">Préparation</h3>
-            <div class="ground"></div>
-            <div class="left"></div>
-            <div class="right"></div>
+    <div class="scene-background" v-if="this.preparation"></div>
+    <div class="container-scene-page">
+      <transition name="fade">
+        <div class="container-curtain" v-if="this.preparation">
+          <div id="scene">
+            <div id="curtain">
+              <h3 class="title-scene">Préparation</h3>
+              <div class="ground"></div>
+              <div class="left"></div>
+              <div class="right"></div>
+            </div>
           </div>
+          <button id="starter" @click="startScene()"> Commencer </button>
         </div>
-        <button id="starter" @click="startScene()"> Commencer </button>
+        <div v-else class="contenu">
+          <div class="grille"></div>
+  
+          <div class="container-speak">
+              <div class="speaking-char">
+                  <span class="span-speaking-char"></span>
+              </div>
+              <div class="text-speaking-char">
+                  <span class="span-text"></span>
+              </div>
+          </div>
+          </div>
+      </transition>
+  
       </div>
-      <div v-else class="contenu">
-        <div class="grille"></div>
-
-        <div class="container-speak">
-            <div class="speaking-char">
-                <span class="span-speaking-char"></span>
-            </div>
-            <div class="text-speaking-char">
-                <span class="span-text"></span>
-            </div>
-        </div>
-        
-    </div>
-</template>
+  </template>
 
 <script>
 import axios from "axios";
@@ -40,7 +42,7 @@ export default {
                [{"s":{"magasin d'informatique":[2,3],"Titouan":[0,0],"Robin":[0,7]}},{"b":"Titouan et Robin ont décidé de se rendre dans un magasin d'informatique pour acheter un nouvel ordinateur. Ils se sont tous les deux levés tôt ce matin pour faire leurs achats."},{"a":"En entrant dans le magasin, Titouan est immédiatement fasciné par les lumières vives et les écrans d'ordinateurs. Robin, quant à lui, s'est dirigé directement vers l'un des employés du magasin pour demander de l'aide.","p":[0,7,"Robin"]},{"d":"Bonjour, pouvez-vous nous aider à trouver le meilleur ordinateur pour nos besoins?","t":"Robin","p":[0,7,"Robin"]},{"d":"Bien sûr, quels sont vos besoins en matière d'ordinateur?","t":"Employé du magasin","p":[2,1,"Employé du magasin"]},{"d":"Nous cherchons un ordinateur qui est rapide et efficace pour travailler sur des projets de développement informatique","t":"Robin","p":[0,7,"Robin"]},{"d":"Je suis surtout intéressé par les ordinateurs qui ont un design cool et qui peuvent jouer à des jeux vidéo","t":"Titouan","p":[0,0,"Titouan"]},{"d":"Très bien, nous avons quelques modèles que vous pourriez aimer. Suivez-moi","t":"Employé du magasin","p":[2,1,"Employé du magasin"]},{"a":"L'employé du magasin les amène dans une section de l'établissement où des ordinateurs de jeu haut de gamme sont exposés sur des étagères en verre. Titouan est immédiatement attiré par les lumières vives et les effets de couleur sur les ordinateurs","p":[1,1,"Titouan"]},{"d":"Regarde ça! Cet ordinateur a un processeur super rapide!","t":"Robin","p":[1,4,"Robin"]},{"a":"Titouan s'approche pour voir l'ordinateur que Robin a trouvé.","p":[1,3,"Titouan"]},{"d":"Qu'en penses-tu, Titouan? C'est ce que tu recherches?","t":"Robin","p":[1,4,"Robin"]},{"d":"Je ne sais pas...","t":"Titouan","p":[1,3,"Titouan"]},{"a":"Robin explique les spécifications techniques de l'ordinateur à Titouan.","p":[1,4,"Robin"]},{"d":"Je le veux! C'est parfait!","t":"Titouan","p":[1,3,"Titouan"]},{"a":"Robin se dirige vers la caisse pour acheter l'ordinateur tandis que Titouan reste en arrière pour regarder les autres ordinateurs.","p":[0,7,"Robin"]},{"a":"Titouan passe devant un écran d'ordinateur avec un jeu vidéo à l'affichage et décide de l'essayer.","p":[1,1,"Titouan"]},{"a":"Il commence à jouer et est complètement absorbé par le jeu, oubliant complètement le temps qui passe.","p":[1,1,"Titouan"]},{"d":"Bonjour monsieur, le magasin ferme dans 10 minutes, il va falloir quitter le magasin.","t":"Employé du magasin","p":[1,1,"Employé du magasin"]},{"d":"Oh désolé, j'ai perdu la notion du temps. Je vais rejoindre mon ami à la caisse","t":"Titouan","p":[1,1,"Titouan"]},{"a":"Titouan se dirige vers la caisse et rejoint Robin qui vient juste de terminer l'achat.","p":[0,7,"Robin",1,3,"Titouan"]},{"d":"Alors Titouan, as-tu trouvé quelque chose?","t":"Robin","p":[0,7,"Robin"]},{"d":"Oui, j'ai trouvé cet ordinateur de jeu super cool!","t":"Titouan","p":[1,3,"Titouan"]},{"d":"Génial, j'ai hâte de voir à quoi ça ressemble chez nous","t":"Robin","p":[0,7,"Robin"]},{"a":"Les deux amis sortent du magasin et se dirigent vers leur voiture pour rentrer chez eux avec leur nouvel ordinateur.","p":[0,7,"Robin",1,3,"Titouan"]},{"E":"Ils sont tous les deux heureux de leur nouvel achat et sont impatients de l'utiliser pour leurs projets et leurs jeux vidéo."}]
             `,
             api: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c&safesearch=true&image_type=illustration&image_type=vector&per_page=10',
-            selectedImage: ""
+            selectedImage: "",
           preparation: true,
         }
     }, 
