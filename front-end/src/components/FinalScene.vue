@@ -59,6 +59,7 @@
           clone.appendChild(divText);
           clone.style.display = "inherit"
           this.original.parentNode.appendChild(clone);
+  
         } else {
 
           let divActionText = document.createElement('div');
@@ -68,7 +69,7 @@
           clone.style.display = "inherit"
           this.original.parentNode.appendChild(clone);
         }
-        
+        this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
       },
 
       async createDivText(completeScenario) {
@@ -85,6 +86,7 @@
         clone.appendChild(divText);
         clone.style.display = "inherit"
         this.original.parentNode.appendChild(clone);
+        this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
       },
 
       async timeSensativeAction() {
