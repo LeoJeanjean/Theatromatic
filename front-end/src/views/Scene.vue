@@ -15,7 +15,7 @@
       </div>
       <div v-else>
         <FinalScene v-if="this.sceneType=='dialog'" :scenarioText="reponseString" />
-        <FinalSceneGrid v-else-if="this.sceneType=='grid'" :scenarioText="reponseString" :elementsImages="elementsImages"/>
+        <FinalSceneGrid v-if="this.sceneType=='grid'" :scenarioText="reponseString" :elementsImages="elementsImages"/>
       </div>
     </transition>
   </div>

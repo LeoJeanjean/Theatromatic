@@ -1,22 +1,9 @@
 <template>
   <div class="scene-background" v-if="this.preparation"></div>
   <div class="container-scene-page">
-    <transition name="fade">
-      <div class="container-curtain" v-if="this.preparation">
-        <div id="scene">
-          <div id="curtain">
-            <h3 class="title-scene">Préparation</h3>
-            <div class="ground"></div>
-            <div class="left"></div>
-            <div class="right"></div>
-          </div>
-        </div>
-        <button id="starter" @click="startScene()"> Commencer </button>
-      </div>
-      <div v-else class="contenu">
-        <div class="grille"></div>
-      </div>
-    </transition>
+    <div class="contenu">
+      <div class="grille"></div>
+    </div>
   </div>
 </template>
 
@@ -28,7 +15,8 @@ export default {
         }
     }, 
     props: {
-      elementsImages:Array
+      elementsImages:Array,
+      scenarioText:String
     },
     methods: {
         startScene() {
