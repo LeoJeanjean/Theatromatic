@@ -52,7 +52,7 @@
         starter.className = "fade-out";
 
         let titleScene = document.querySelector('.title-scene');
-        titleScene.innerHTML = "Pièce"
+        titleScene.innerHTML = localStorage.getItem('name')
         setTimeout(function () {
           starter.style.display = 'none';
         }, 2000);
@@ -66,8 +66,6 @@
             this.$router.push('/login')
       }
       this.setup();
-      console.log(localStorage.getItem('script'));
-      console.log(JSON.parse(localStorage.getItem('persoList')));
     },
     beforeUnmount() {
       localStorage.removeItem('script')
