@@ -1,34 +1,44 @@
 <template>
-  <div class="scene-background" v-if="this.preparation"></div>
-  <div class="container-scene-page">
-    <transition name="fade">
-      <div class="container-curtain" v-if="this.preparation">
-        <div id="scene">
-          <div id="curtain">
-            <h3 class="title-scene">Préparation</h3>
-            <div class="ground"></div>
-            <div class="left"></div>
-            <div class="right"></div>
-          </div>
-        </div>
-        <button id="starter" @click="startScene()"> Commencer </button>
-      </div>
-      <div v-else class="contenu">
+    <div class="scene-background" v-if="this.preparation"></div>
+    <div class="container-scene-page">
+      <div class="contenu">
         <div class="grille"></div>
+        <div class="container-speak">
+            <div class="speaking-char">
+                <span class="span-speaking-char"></span>
+            </div>
+            <div class="text-speaking-char">
+                <span class="span-text"></span>
+            </div>
+        </div>
       </div>
-    </transition>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
+
+
     data() {
         return {
-          preparation: true,
+            scenario: `
+               [{"s":{"magasin d'informatique":[2,3],"Titouan":[0,0],"Robin":[0,7]}},{"b":"Titouan et Robin ont décidé de se rendre dans un magasin d'informatique pour acheter un nouvel ordinateur. Ils se sont tous les deux levés tôt ce matin pour faire leurs achats."},{"a":"En entrant dans le magasin, Titouan est immédiatement fasciné par les lumières vives et les écrans d'ordinateurs. Robin, quant à lui, s'est dirigé directement vers l'un des employés du magasin pour demander de l'aide.","p":[0,7,"Robin"]},{"d":"Bonjour, pouvez-vous nous aider à trouver le meilleur ordinateur pour nos besoins?","t":"Robin","p":[0,7,"Robin"]},{"d":"Bien sûr, quels sont vos besoins en matière d'ordinateur?","t":"Employé du magasin","p":[2,1,"Employé du magasin"]},{"d":"Nous cherchons un ordinateur qui est rapide et efficace pour travailler sur des projets de développement informatique","t":"Robin","p":[0,7,"Robin"]},{"d":"Je suis surtout intéressé par les ordinateurs qui ont un design cool et qui peuvent jouer à des jeux vidéo","t":"Titouan","p":[0,0,"Titouan"]},{"d":"Très bien, nous avons quelques modèles que vous pourriez aimer. Suivez-moi","t":"Employé du magasin","p":[2,1,"Employé du magasin"]},{"a":"L'employé du magasin les amène dans une section de l'établissement où des ordinateurs de jeu haut de gamme sont exposés sur des étagères en verre. Titouan est immédiatement attiré par les lumières vives et les effets de couleur sur les ordinateurs","p":[1,1,"Titouan"]},{"d":"Regarde ça! Cet ordinateur a un processeur super rapide!","t":"Robin","p":[1,4,"Robin"]},{"a":"Titouan s'approche pour voir l'ordinateur que Robin a trouvé.","p":[1,3,"Titouan"]},{"d":"Qu'en penses-tu, Titouan? C'est ce que tu recherches?","t":"Robin","p":[1,4,"Robin"]},{"d":"Je ne sais pas...","t":"Titouan","p":[1,3,"Titouan"]},{"a":"Robin explique les spécifications techniques de l'ordinateur à Titouan.","p":[1,4,"Robin"]},{"d":"Je le veux! C'est parfait!","t":"Titouan","p":[1,3,"Titouan"]},{"a":"Robin se dirige vers la caisse pour acheter l'ordinateur tandis que Titouan reste en arrière pour regarder les autres ordinateurs.","p":[0,7,"Robin"]},{"a":"Titouan passe devant un écran d'ordinateur avec un jeu vidéo à l'affichage et décide de l'essayer.","p":[1,1,"Titouan"]},{"a":"Il commence à jouer et est complètement absorbé par le jeu, oubliant complètement le temps qui passe.","p":[1,1,"Titouan"]},{"d":"Bonjour monsieur, le magasin ferme dans 10 minutes, il va falloir quitter le magasin.","t":"Employé du magasin","p":[1,1,"Employé du magasin"]},{"d":"Oh désolé, j'ai perdu la notion du temps. Je vais rejoindre mon ami à la caisse","t":"Titouan","p":[1,1,"Titouan"]},{"a":"Titouan se dirige vers la caisse et rejoint Robin qui vient juste de terminer l'achat.","p":[0,7,"Robin",1,3,"Titouan"]},{"d":"Alors Titouan, as-tu trouvé quelque chose?","t":"Robin","p":[0,7,"Robin"]},{"d":"Oui, j'ai trouvé cet ordinateur de jeu super cool!","t":"Titouan","p":[1,3,"Titouan"]},{"d":"Génial, j'ai hâte de voir à quoi ça ressemble chez nous","t":"Robin","p":[0,7,"Robin"]},{"a":"Les deux amis sortent du magasin et se dirigent vers leur voiture pour rentrer chez eux avec leur nouvel ordinateur.","p":[0,7,"Robin",1,3,"Titouan"]},{"E":"Ils sont tous les deux heureux de leur nouvel achat et sont impatients de l'utiliser pour leurs projets et leurs jeux vidéo."}]
+            `,
+            selectedImage: "",
+            preparation: true,
         }
     }, 
+    props: {
+      elementsImages:Array,
+      scenarioText:String
+    },
+    mounted() {
+      this.startScene()
+    },
     methods: {
-        startScene() {
+      startScene() {
         this.showTime()
         let interval = setInterval(function () {
           this.preparation = false;
@@ -37,41 +47,142 @@ export default {
         let grid = setInterval(function () {
           this.initGrid();
           clearInterval(grid)
+          this.createScene();
         }.bind(this), 6000);
-        },
-        showTime() {
-          var curtain = document.getElementById("curtain");
-          curtain.className = "open";
+      },
+      showTime() {
+        var curtain = document.getElementById("curtain");
+        curtain.className = "open";
 
-          var scene = document.getElementById("scene");
-          scene.className = "expand";
+        var scene = document.getElementById("scene");
+        scene.className = "expand";
 
-          var starter = document.getElementById("starter");
-          starter.className = "fade-out";
+        var starter = document.getElementById("starter");
+        starter.className = "fade-out";
 
-          let titleScene = document.querySelector('.title-scene');
-          titleScene.innerHTML = localStorage.getItem('name')
-          setTimeout(function () {
-            starter.style.display = 'none';
-          }, 2000)
-        },
-        initGrid() {
-            const container = document.querySelector('.grille');
-            container.setAttribute("class", "grille container");
-            const row = 7;
-            const col = 5
-            for(let i = 0; i < row*col; i++) {
-                let gridCase = document.createElement('div');
-                gridCase.classList.add("case")
-                container.appendChild(gridCase);
-                let divimg = document.createElement('div');
-                let img = document.createElement('img');
-                img.setAttribute('src', "https://cdn.pixabay.com/photo/2013/07/12/19/16/battle-axe-154454_1280.png")
-                //divimg.appendChild(img)
-               // gridCase.appendChild(divimg)
-            }
-            return 'test'
+        let titleScene = document.querySelector('.title-scene');
+        titleScene.innerHTML = localStorage.getItem('name')
+        setTimeout(function () {
+          starter.style.display = 'none';
+        }, 2000)
+      },
+      initGrid() {
+        const container = document.querySelector('.grille');
+        container.setAttribute("class", "grille container");
+        const row = 8;
+        const col = 5;
+        for (let i = 0; i < row * col; i++) {
+          let gridCase = document.createElement('div');
+          const rowIndex = Math.floor(i / col);
+          const colIndex = i % col;
+          gridCase.classList.add("case")
+          gridCase.classList.add("c" + colIndex + "r" + rowIndex)
+          container.appendChild(gridCase);
+          let divimg = document.createElement('div');
+          let img = document.createElement('img');
+          img.classList.add("c" + colIndex + "r" + rowIndex + "img")
+          divimg.appendChild(img)
+          gridCase.appendChild(divimg)
         }
+
+        // {"s": {"arène": [2, 4], "Bob": [0, 1], "Jean": [4, 6]}}
+
+        let indexOfOpenBracket = this.scenarioText.data.indexOf("[");
+
+        let indexOfCloseBracket = this.scenarioText.data.lastIndexOf("]");
+
+        this.scenarioText.data =  this.scenarioText.data.substring(indexOfOpenBracket, indexOfCloseBracket + 1)
+
+        let scenarioGridJson = JSON.parse(this.scenarioText.data);
+
+        console.log(scenarioGridJson[0]["s"]);
+
+
+        for (const keyScenarioGrid in scenarioGridJson[0]["s"]) {
+            let value = scenarioGridJson[0]["s"][keyScenarioGrid];
+            let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
+            for (const key in this.elementsImages) {
+                if(keyScenarioGrid == this.elementsImages[key]["name"]) {
+                    imgCase.setAttribute('src', this.elementsImages[key]["url"])
+                }                
+            }
+
+        }
+
+        return 'test'
+      },
+
+      async createScene() {
+
+        let parsedScenario = JSON.parse(this.scenarioText.data);
+
+        let charcterSpeech = document.querySelector('.span-text');
+        let characterText = document.querySelector('.span-speaking-char');
+
+        const sleep = (milliseconds) => {
+          return new Promise(resolve => setTimeout(resolve, milliseconds))
+        }
+
+        const itemOrCharcater = parsedScenario[0]["s"];
+
+        characterText.innerHTML = ""
+        charcterSpeech.innerHTML = parsedScenario[1]["b"];
+
+        await sleep(2000)
+
+
+        for (let i = 2; i < parsedScenario.length - 1; i++) {
+
+          const scenarioLine = parsedScenario[i];
+
+          if (scenarioLine["d"]) {
+
+            if (scenarioLine["p"]) {
+                
+              let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
+              this.getRightImage(scenarioLine["p"][2],getImgCell)
+              
+            }
+            characterText.innerHTML = scenarioLine["t"];
+            charcterSpeech.innerHTML = scenarioLine["d"];
+            await sleep(2000)
+          } else {
+            if (scenarioLine["p"]) {
+              let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
+              this.getRightImage(scenarioLine["p"][2],getImgCell)
+            }
+            characterText.innerHTML = "";
+            charcterSpeech.innerHTML = scenarioLine["a"];
+            await sleep(2000)
+          }
+        }
+        characterText.innerHTML = ""
+        charcterSpeech.innerHTML = parsedScenario[parsedScenario.length - 1]["E"];
+
+      },
+      getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      },
+      getRightImage(nameCharacterOrItem, getImgCell) {
+
+        var images = document.getElementsByTagName('img');
+
+        for (const key in this.elementsImages) {
+                if(nameCharacterOrItem == this.elementsImages[key]["name"]) {
+
+                    for (let i = 0; i < images.length; i++) {
+                        if (images[i].src == this.elementsImages[key]["url"] && images[i].className !== "c"+getImgCell[1]+"r"+getImgCell[3]) {
+                            images[i].setAttribute('src',"");
+                        }
+                    }
+
+                    getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
+                    return this.elementsImages[key]["url"]
+                }                
+            }
+        return null
+
+    }
     }
 }
 </script>
@@ -80,11 +191,26 @@ export default {
 @import '../assets/scene.css';
 @import '../assets/curtain.css';
 
+    .container-speak {
+        width: 80%;
+    }
+
+    .text-speaking-char {
+        border:solid 2px #000;
+        height: 20vh;
+        margin-top: 30px;
+    }
+
     img {
         width: 30%;
     }
 
     .contenu {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         margin-top: 50px;
         height: 100%;
     }
@@ -107,12 +233,11 @@ export default {
 
     .grille > div {
         flex: 1 1 80px;
-        border:1px solid white;
     }
 
     .container {
         display: grid;
-        grid-row: 7;
+        grid-row: 8;
         grid-template-columns: repeat(5, minmax(0,1fr));
         grid-gap: 0;
     }
@@ -121,14 +246,13 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid rgb(101, 9, 175);
         width: 100%;
         height: 100%;
     }
 
 
     .case {
-        border: 1px solid rgb(0, 0, 0);
+
         width: 14%;
         height: 13%;
     }

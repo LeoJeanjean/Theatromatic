@@ -34,11 +34,6 @@ const router = createRouter({
       path: '/personnages',
       name: 'personnages',
       component: () => import('../views/Characters.vue')
-    },
-    {
-      path: '/scenegrid',
-      name: 'scenegrid',
-      component: () => import('../components/FinalSceneGrid.vue')
     }
   ]
 })
