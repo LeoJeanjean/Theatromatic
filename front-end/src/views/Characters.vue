@@ -97,7 +97,7 @@
         </p>
         <p>
           <button class="submit" @click="checkForm(false)">Ajouter</button>
-          <button class="submit" @click="checkForm(true)">Modifier</button>
+          <button class="submit" v-if="persoSelect._id !== ''" @click="checkForm(true)">Modifier</button>
         </p>
         <p v-if="errors.length">
           <b>Veuillez corriger les erreurs suivantes:</b>
