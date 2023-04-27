@@ -159,6 +159,12 @@ export default {
         characterText.innerHTML = ""
         charcterSpeech.innerHTML = parsedScenario[parsedScenario.length - 1]["E"];
 
+        var images = document.getElementsByTagName('img');
+
+        for (let i = 0; i < images.length; i++) {
+            images[i].setAttribute("src","")
+        }
+
       },
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
@@ -175,7 +181,7 @@ export default {
                             images[i].setAttribute('src',"");
                         }
                     }
-
+                    
                     getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
                     return this.elementsImages[key]["url"]
                 }                
