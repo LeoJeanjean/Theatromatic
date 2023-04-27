@@ -57,7 +57,7 @@ Exemple plus long: `,
         starter.className = "fade-out";
 
         let titleScene = document.querySelector('.title-scene');
-        titleScene.innerHTML = "Pièce"
+        titleScene.innerHTML = localStorage.getItem('name')
         setTimeout(function () {
           starter.style.display = 'none';
         }, 2000);
