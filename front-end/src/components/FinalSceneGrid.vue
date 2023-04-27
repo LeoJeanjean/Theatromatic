@@ -27,6 +27,9 @@ export default {
           preparation: true,
         }
     }, 
+    props: {
+      elementsImages:Array
+    },
     methods: {
         startScene() {
         this.showTime()

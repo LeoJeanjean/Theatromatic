@@ -12,8 +12,8 @@
     <div class="bottom">
       <input class="b1" v-model="sceneName">
       <div class="sceneChoose">
-        <div class="b1" :class="!sceneType ? 'choose' : 'noChoose'" @click="sceneType=false">Dialogue</div>
-        <div class="b1" :class="sceneType ? 'choose' : 'noChoose'" @click="sceneType=true">Grille</div>
+        <div class="b1" :class="sceneType == 'dialog' ? 'choose' : 'noChoose'" @click="sceneType='dialog'">Dialogue</div>
+        <div class="b1" :class="sceneType == 'grid' ? 'choose' : 'noChoose'" @click="sceneType='grid'">Grille</div>
       </div>
       <div class="buttons">
       <router-link to="/" class="scenarBtn b1">Retour</router-link>
@@ -31,7 +31,7 @@ export default {
   name: "ScenarioView",
   components: {CharacterList},
   data: () => ({
-    sceneType: false,
+    sceneType: "dialog",
     persoList: [],
     script: '',
     sceneName: ''
@@ -56,11 +56,8 @@ export default {
       localStorage.setItem('script', this.script)
       localStorage.setItem('name', this.sceneName)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
-      if (this.sceneType) {
-        router.push({name: 'scenegrid'})
-      } else {
-        router.push({name: 'scene'})
-      }
+      localStorage.setItem('sceneType', this.sceneType)
+      router.push({name: 'scene'})
     },
     check() {
       this.sceneType = !this.sceneType

@@ -37,8 +37,7 @@
       }
     },
     props: {
-      scenarioText:String,
-      elementsImages:Array
+      scenarioText:String
     },
     methods : {
    
