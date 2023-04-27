@@ -105,8 +105,8 @@
             <li v-for="error in errors">{{ error }}</li>
           </ul>
         </p>
-        <p v-else-if="created">
-          <b>Personnage ajouté / modifié.</b>
+        <p v-else-if="created !== ''">
+          <b>Personnage {{created}}.</b>
         </p>
       </div>
     </div>
@@ -152,7 +152,7 @@ export default {
     images: null,
     sText: '',
     showDialog: false,
-    created: false,
+    created: '',
     confirm: false
   }),
   methods: {
@@ -174,9 +174,6 @@ export default {
       if (!this.persoSelect.job) {
         this.errors.push('Fonction requis.');
       }
-      if(this.errors.length === 0) {
-        this.created = true;
-      }
     },
     createNewCharacter: async function () {
       let user = JSON.parse(localStorage.getItem('user'));
@@ -187,27 +184,33 @@ export default {
             character: newCharacter,
           },
           {}
-      ).then(() => {
-        this.getCharacter()
+      ).then(async () => {
+        await this.getCharacter()
+        this.created = 'crée';
       })
     },
     async updateCharacter() {
-      await axios.put(
-          'http://localhost:3000/updateCharacter',
-          {
-            character: {
-              _id: this.persoSelect._id,
-              name: this.persoSelect.name,
-              gender: this.persoSelect.gender,
-              job: this.persoSelect.job,
-              characteristics: this.persoSelect.characteristics,
-              choosenImageUrl: this.persoSelect.choosenImageUrl
-            }
-          },
-          {}
-      ).then(() => {
-        this.getCharacter()
-      })
+      try {
+        await axios.put(
+            'http://localhost:3000/updateCharacter',
+            {
+              character: {
+                _id: this.persoSelect._id,
+                name: this.persoSelect.name,
+                gender: this.persoSelect.gender,
+                job: this.persoSelect.job,
+                characteristics: this.persoSelect.characteristics,
+                choosenImageUrl: this.persoSelect.choosenImageUrl
+              }
+            },
+            {}
+        ).then(async () => {
+          await this.getCharacter()
+          this.created = 'modifié';
+        })
+      } catch (err) {
+        console.log(err)
+      }
     },
     selectCharacter(id) {
       this.persoSelect._id = id
@@ -280,6 +283,7 @@ export default {
           this.persoDelete._id = ''
           this.persoDelete.name = ''
           this.confirm = false
+          this.created = 'supprimé';
         } else {
           console.log("erreur")
         }
