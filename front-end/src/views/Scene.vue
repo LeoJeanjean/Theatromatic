@@ -98,8 +98,8 @@ Exemple plus long: `,
 
         let indexOfOpenBracket = this.reponseString.data.indexOf("[");
         let indexOfCloseBracket = this.reponseString.data.lastIndexOf("]");
-        this.reponseString.data =  this.reponseString.data.substring(indexOfOpenBracket, indexOfCloseBracket + 1)
-        let scenar = JSON.parse(this.reponseString.data); 
+        var elt =  this.reponseString.data.substring(indexOfOpenBracket, indexOfCloseBracket + 1)
+        let scenar = JSON.parse(elt); 
 
         //console.log(scenar[0]);
         //this.disabled = false;
