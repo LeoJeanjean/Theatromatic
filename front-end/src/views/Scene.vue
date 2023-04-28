@@ -14,7 +14,7 @@
         </div>
         <button id="starter" class="b1" :disabled="disabled" @click="startScene()"> {{ this.Bouton }} </button>
       </div>
-      <div v-else>
+      <div style="width: 100%" v-else>
         <FinalScene v-if="this.sceneType=='dialog'" :scenarioText="reponseString" />
         <FinalSceneGrid v-if="this.sceneType=='grid'" :scenarioText="reponseString" :elementsImages="elementsImages"/>
       </div>

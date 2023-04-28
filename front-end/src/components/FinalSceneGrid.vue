@@ -165,7 +165,7 @@ export default {
         var images = document.getElementsByTagName('img');
 
         for (let i = 0; i < images.length; i++) {
-            images[i].setAttribute("src","")
+            images[i].setAttribute("src","https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png")
         }
 
       },
