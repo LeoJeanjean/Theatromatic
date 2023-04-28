@@ -17,7 +17,7 @@
             <td :id="perso._id+'g'">{{ perso.gender }}</td>
             <td :id="perso._id+'j'">{{ perso.job }}</td>
             <td :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></td>
-            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl" alt="aucune image sélectionnée"/></td>
+            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl" alt="aucune image sélectionnée" onerror="placeHolder(perso._id+'i')"/></td>
             <td class="flex-column">
               <button class="edit" @click="selectCharacter(perso._id)" title="Modifier le personnage">|</button>
               <button class="suppr" @click="deleteConfirm(perso._id,perso.name)" title="Supprimer le personnage">X</button>
@@ -76,7 +76,7 @@
             <div class="overlay"></div>
             <div class="dialog">
               <div class="dialog-header">
-                <h2>Dialog Title</h2>
+                <h2>Banque d'image</h2>
                 <span @click="showDialog = false">X</span>
               </div>
               <div class="dialog-content">
@@ -115,7 +115,7 @@
   <div :class="confirm ? 'show' : 'hide'">
     <div class="confirm">
     Vous allez supprimez {{persoDelete.name}}.
-    Êtes vous sûr ?
+    Êtes-vous sûr ?
     <button class="b1" @click="confirm = false">Non</button>
     <button class="b1" @click="deleteCharacter(persoDelete._id)">Oui</button>
     </div>
@@ -126,6 +126,7 @@
 import axios from "axios";
 import CharacterForm from '../components/CharacterForm.vue'
 import Character from "@/models/Character";
+import PlaceHolder from "@/assets/placeholder.png"
 
 export default {
   name: "Characters",
@@ -156,6 +157,9 @@ export default {
     confirm: false
   }),
   methods: {
+    placeHolder: function (id) {
+      document.getElementById(id).src = PlaceHolder
+    },
     checkForm: async function (update) {
       if (this.persoSelect.name && this.persoSelect.gender && this.persoSelect.job && this.persoSelect.choosenImageUrl) {
         if (!update) {
@@ -189,7 +193,7 @@ export default {
           {}
       ).then(async () => {
         await this.getCharacter()
-        this.created = 'crée';
+        this.created = 'créé';
       })
     },
     async updateCharacter() {
@@ -430,7 +434,7 @@ export default {
   color: white;
 }
 .background .b1 {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 h2 {
