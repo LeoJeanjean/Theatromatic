@@ -13,9 +13,16 @@
                 <div class="span-text"></div>
             </div>
             <div class="indication-press-key">Presser Espace pour continuer</div>
+            <div class="return-btn-div">
+            <button class="b1" @click="redirectPage('/scenario')"> Retour </button>
+          </div>
         </div>
       </div>
-  </div>
+     
+    </div>
+
+
+  
 </template>
 
 <script>
@@ -109,7 +116,9 @@ export default {
 
         return 'test'
       },
-
+      redirectPage (route) {
+        this.$router.push(route)
+      },
       async createScene() {
 
         let parsedScenario = JSON.parse(this.scenarioText.data);
@@ -168,6 +177,8 @@ export default {
             images[i].setAttribute("src","https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png")
         }
 
+        await sleep(1000);
+
       },
       waitingKeypress() {
         return new Promise((resolve) => {
@@ -191,7 +202,7 @@ export default {
                 if(nameCharacterOrItem == this.elementsImages[key]["name"]) {
                     for (let i = 0; i < images.length; i++) {
                         if (images[i].src == this.elementsImages[key]["url"] && images[i].className !== "c"+getImgCell[1]+"r"+getImgCell[3]) {
-                            images[i].setAttribute('src',"");
+                            images[i].setAttribute("src","https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png")
                         }
                     }
 
@@ -335,7 +346,7 @@ export default {
 
     .indication-press-key {
       display: flex;
+      color: #FFF;
       justify-content: end;
     }
-
 </style>

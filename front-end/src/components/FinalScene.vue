@@ -9,8 +9,13 @@
         </svg>
       </div>
     </div>
+    <div class="div-return-btn">
+      <button class="b1" @click="redirectPage('/scenario')"> Retour </button>  
+    </div>
   </div>
-</template>
+</template>    
+
+
 
 <script>
   export default {
@@ -23,17 +28,8 @@
           slow: 120,
           normal: 90,
           fast: 40,
-          superFast: 10,
-        },
-        textLines: [
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Have you seen my pet frog around?", character: "Sasha"},
-          {speed: 10, string: "No", classes: ["green"], character: "Tom"},
-          {speed: 10, string: "Ok", character: "Sasha"}
-        ]
+          superFast: 10
+        }
       }
     },
     props: {
@@ -88,7 +84,9 @@
         this.original.parentNode.appendChild(clone);
         this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
       },
-
+      redirectPage (route) {
+        this.$router.push(route)
+      },
       async timeSensativeAction() {
         const sleep = (milliseconds) => {
           return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -152,4 +150,12 @@
     padding: 10px;
     font-size: 20px;
   }
+
+  .div-return-btn {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9999;
+  }
+
 </style>
