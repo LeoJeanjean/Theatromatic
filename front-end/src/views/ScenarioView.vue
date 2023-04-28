@@ -35,6 +35,7 @@
 import CharacterList from "@/components/characterList.vue";
 import router from "@/router";
 import axios from "axios";
+import chatter from "../assets/crowd-chatter.mp3"
 export default {
   name: "ScenarioView",
   components: {CharacterList},
@@ -65,6 +66,7 @@ export default {
       localStorage.setItem('name', this.sceneName)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
       localStorage.setItem('sceneType', this.sceneType)
+      this.$emit("changeMusic",chatter)
       this.$router.push({name: 'scene'})
     },
     check() {
