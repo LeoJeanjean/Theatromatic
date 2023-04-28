@@ -9,7 +9,7 @@
         </svg>
       </div>
     </div>
-    <div v-if="end" class="div-return-btn">
+    <div v-if="this.end" class="div-return-btn">
       <button class="b1" @click="redirectPage('/scenario')"> Retour </button>  
     </div>
   </div>
@@ -30,16 +30,7 @@
           fast: 40,
           superFast: 10,
           end: false
-        },
-        textLines: [
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Oh, hello!", character: "Tom"},
-          {speed: 10, string: "Have you seen my pet frog around?", character: "Sasha"},
-          {speed: 10, string: "No", classes: ["green"], character: "Tom"},
-          {speed: 10, string: "Ok", character: "Sasha"}
-        ]
+        }
       }
     },
     props: {
@@ -136,7 +127,7 @@
       this.timeSensativeAction().then(
         () => {
           this.end = true;
-          //document.body.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+          this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
         }
       );
 
