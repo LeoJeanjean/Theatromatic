@@ -176,8 +176,13 @@ export default {
                             images[i].setAttribute('src',"");
                         }
                     }
+
+                    console.log("*****************************");
+                    console.log("c"+getImgCell[1]+"r"+getImgCell[3]);
+                    console.log(this.elementsImages[key]["url"]);
+                    console.log("*****************************");
                     
-                    getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
+                    getImgCell.setAttribute("src", this.elementsImages[key]["url"])
                     return this.elementsImages[key]["url"]
                 }                
             }

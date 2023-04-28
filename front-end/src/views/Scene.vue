@@ -106,24 +106,23 @@ import axios from "axios";
         console.log(elt);
         try {
           let scenar = JSON.parse(elt);    
-        } catch(error) {
-          window.location.reload();
-        }
-       
-        Object.keys(scenar[0].s).forEach(element => {
-          console.log(element)
+          Object.keys(scenar[0].s).forEach(element => {
           if(!this.personnages.includes(element)){
             this.elements.push(element)
           }
         });
+
+        } catch(error) {
+          window.location.reload();
+        }
       
         this.elements.forEach(element => {
           axios.get(this.urlImages+'&q='+element)
           .then(response=>{
             this.images = response.data.hits
-            console.log(images);
-            console.log( response.data);
-            var elt = {url: this.images[0].largeImageURL, name: element}
+            console.log(this.images);
+            let randInt = Math.floor(Math.random() * 3);
+            var elt = {url: this.images[randInt].largeImageURL, name: element}
             this.elementsImages.push(elt)
           })
           .catch(error=>{
