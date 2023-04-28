@@ -98,7 +98,12 @@ import axios from "axios";
         let indexOfCloseBracket = this.reponseString.data.lastIndexOf("]");
         var elt =  this.reponseString.data.substring(indexOfOpenBracket, indexOfCloseBracket + 1)
         console.log(elt);
-        let scenar = JSON.parse(elt); 
+        try {
+          let scenar = JSON.parse(elt);    
+        } catch(error) {
+          window.location.reload();
+        }
+       
         Object.keys(scenar[0].s).forEach(element => {
           console.log(element)
           if(!this.personnages.includes(element)){
