@@ -3,21 +3,29 @@
     <h2>Nouvelle pièce</h2>
     <div class="scenarForm">
       <div class="formPart">
+        <h3>Cadre de l'histoire</h3>
         <textarea v-model="script" class="scenarea" placeholder="Ils arrivent dans une forêt..."></textarea>
       </div>
       <div class="formPart">
+        <h3>Personnages</h3>
         <character-list :persoList="persoList" />
       </div>
     </div>
-    <div class="bottom">
-      <input class="b1" v-model="sceneName">
+    <div class="middle">
+      <h3>Titre de la pièce</h3>
+      <input type="text" placeholder=". . ." class="b3" v-model="sceneName">
+    </div>
+    <h3>Format</h3>
+    <div class="sceneChoose">
       <div class="sceneChoose">
-        <div class="b1" :class="!sceneType ? 'choose' : 'noChoose'" @click="sceneType=false">Dialogue</div>
-        <div class="b1" :class="sceneType ? 'choose' : 'noChoose'" @click="sceneType=true">Grille</div>
+        <div class="b2" :class="sceneType == 'dialog' ? 'choose' : 'noChoose'" @click="sceneType='dialog'">Dialogue</div>
+        <div class="b2" :class="sceneType == 'grid' ? 'choose' : 'noChoose'" @click="sceneType='grid'">Grille</div>
       </div>
+    </div>
+    <div class="bottom">
       <div class="buttons">
       <router-link to="/" class="scenarBtn b1">Retour</router-link>
-      <button @click="submit()" class="scenarBtn b1" type="button">Créer scène</button>
+      <button @click="submit()" class="scenarBtn b1" type="button">Commencer</button>
       </div>
     </div>
   </div>
@@ -31,7 +39,7 @@ export default {
   name: "ScenarioView",
   components: {CharacterList},
   data: () => ({
-    sceneType: false,
+    sceneType: "dialog",
     persoList: [],
     script: '',
     sceneName: ''
@@ -56,11 +64,8 @@ export default {
       localStorage.setItem('script', this.script)
       localStorage.setItem('name', this.sceneName)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
-      if (this.sceneType) {
-        router.push({name: 'scenegrid'})
-      } else {
-        router.push({name: 'scene'})
-      }
+      localStorage.setItem('sceneType', this.sceneType)
+      this.$router.push({name: 'scene'})
     },
     check() {
       this.sceneType = !this.sceneType
@@ -115,16 +120,15 @@ export default {
 .scenarForm {
   color: black;
   display: flex;
-  height: 70%;
+  height: 50%;
   width: 60%;
 }
 .formPart {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   width: 90%;
-  height: 80%;
+  height: 90%;
 }
 .formPart character-list{
   display: flex;
@@ -132,8 +136,8 @@ export default {
 }
 .scenarea {
   overflow-y: scroll;
-  width: 100%;
-  height: 80%;
+  width: 90%;
+  height: 100%;
 }
 .scenarBtn {
   width: 20%;
@@ -149,6 +153,40 @@ export default {
 
 h2 {
   font-size: 48px;
+}
+h3 {
+  color: white;
+}
+
+.middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  margin-bottom: 20px;
+}
+.middle .b3{
+  width: 80%;
+  max-width: 420px;
+  font-size: 24px;
+  margin: 0 10px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  cursor: text;
+}
+
+.sceneChoose {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.sceneChoose .b2 {
+  text-align: center;
+  width: 120px;
+
 }
 
 .bottom {
@@ -167,7 +205,6 @@ h2 {
 .sceneChoose {
   display: flex;
   justify-content: center;
-  width: 30%;
 }
 @keyframes choose {
   from {filter: hue-rotate(-45deg) brightness(50%);}
@@ -189,5 +226,9 @@ h2 {
   filter: hue-rotate(-45deg) brightness(50%);
   animation-name: nochoose;
   animation-duration: 1s;
+}
+
+.charaList {
+  height: 100%;
 }
 </style>

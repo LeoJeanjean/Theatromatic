@@ -80,6 +80,10 @@ export default {
   justify-content: space-evenly;
   align-items: center;
 }
+.buttons .b1{
+  width: 300px;
+  font-size: 25px;
+}
 
 .logout{
   cursor: pointer;
