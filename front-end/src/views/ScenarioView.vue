@@ -65,7 +65,7 @@ export default {
       localStorage.setItem('name', this.sceneName)
       localStorage.setItem('persoList', JSON.stringify(this.persoInScenar))
       localStorage.setItem('sceneType', this.sceneType)
-      router.push({name: 'scene'})
+      this.$router.push({name: 'scene'})
     },
     check() {
       this.sceneType = !this.sceneType
