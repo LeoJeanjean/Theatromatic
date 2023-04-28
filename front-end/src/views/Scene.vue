@@ -27,7 +27,7 @@
 import FinalScene from "../components/FinalScene.vue";
 import FinalSceneGrid from "../components/FinalSceneGrid.vue";
 import axios from "axios";
-import chatter from "../assets/crowd-chatter.mp3";
+import Scene from '../assets/scene.mp3'
   export default {
     data() {
       return {
@@ -53,6 +53,7 @@ import chatter from "../assets/crowd-chatter.mp3";
       },
         startScene() {
         this.$emit("stopMusic")
+        this.$emit("changeMusic", Scene)
         this.showTime()
         let interval = setInterval(function () {
           this.preparation = false;

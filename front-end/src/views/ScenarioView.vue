@@ -24,7 +24,7 @@
     </div>
     <div class="bottom">
       <div class="buttons">
-      <router-link to="/" class="scenarBtn b1">Retour</router-link>
+      <button @click="redirectPage('/')" class="scenarBtn b1">Retour</button>
       <button @click="submit()" class="scenarBtn b1" type="button">Commencer</button>
       </div>
     </div>
@@ -46,6 +46,9 @@ export default {
     sceneName: ''
   }),
   methods: {
+    redirectPage(route) {
+      this.$router.push(route)
+    },
     submit() {
       this.persoInScenar = []
       for (const index in this.persoList) {

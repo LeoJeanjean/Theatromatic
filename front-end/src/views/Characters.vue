@@ -430,7 +430,7 @@ export default {
   color: white;
 }
 .background .b1 {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 h2 {
