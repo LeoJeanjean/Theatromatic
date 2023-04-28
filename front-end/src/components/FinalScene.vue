@@ -105,14 +105,23 @@
 
         this.createDivText(scenar[1])
         for (let i = 2; i < scenar.length - 1; i++) {
-          await sleep(2000)
-
+          await sleep(2000);
           this.duplicate(scenar[i])
         }
         this.createDivText(scenar[scenar.length - 1])
-
-        await sleep(1000)
-      }
+        await sleep(2000);
+      },
+      waitingKeypress() {
+        return new Promise((resolve) => {
+          document.addEventListener('keydown', onKeyHandler);
+          function onKeyHandler(e) {
+            if (e.keyCode === 32) {
+              document.removeEventListener('keydown', onKeyHandler);
+              resolve();
+            }
+          }
+        });
+      },
 
   },mounted() {
       this.original = document.getElementById('text-id')      
