@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView @changeMusic="changeMusic" @send="receive"/>
+  <RouterView @stopMusic="stopMusic" @changeMusic="changeMusic" @send="receive"/>
 </template>
 
 <script>
@@ -38,6 +38,9 @@ export default {
       changeMusic(childData) {
         this.audio.src = childData
         this.audio.play();
+      },
+      stopMusic() {
+        this.audio.pause();
       }
     },
     computed: {

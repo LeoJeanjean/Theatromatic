@@ -52,7 +52,7 @@ Exemple plus long: `,
         document.body.addEventListener('onload', focus());
       },
         startScene() {
-        this.$emit("changeMusic",'')
+        this.$emit("stopMusic")
         this.showTime()
         let interval = setInterval(function () {
           this.preparation = false;
