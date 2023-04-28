@@ -1,7 +1,7 @@
 <template>
 
   <div class="background-final-scene"></div> 
-  <div class="container-final-scene">
+  <div class="container-final-scene normal">
     <h1>Dialog</h1>
     <div class="speaking-char">
       <div class="text" id="text-id">
@@ -9,7 +9,7 @@
         </svg>
       </div>
     </div>
-    <div v-if="this.end" class="div-return-btn">
+    <div class="div-return-btn">
       <button class="b1" @click="redirectPage('/scenario')"> Retour </button>  
     </div>
   </div>
@@ -28,8 +28,7 @@
           slow: 120,
           normal: 90,
           fast: 40,
-          superFast: 10,
-          end: false
+          superFast: 10
         }
       }
     },
@@ -124,13 +123,7 @@
 
   },mounted() {
       this.original = document.getElementById('text-id')      
-      this.timeSensativeAction().then(
-        () => {
-          this.end = true;
-          this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
-        }
-      );
-
+      this.timeSensativeAction();
     }
   }
 
@@ -151,9 +144,18 @@
     padding: 20px;
   }
 
+  .normal .speaking-char {
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0);
+    padding: 10px;
+    font-size: 20px;
+  }
+
   .div-return-btn {
-      display: flex;
-      justify-content: center;
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9999;
   }
 
 </style>
