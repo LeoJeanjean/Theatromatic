@@ -132,23 +132,26 @@ export default {
         for (let i = 2; i < parsedScenario.length - 1; i++) {
 
           const scenarioLine = parsedScenario[i];
+          var isCharSpeaking = false;
 
           if (scenarioLine["d"]) {
+            isCharSpeaking = true;
 
             if (scenarioLine["p"]) {
                 
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
-              this.getRightImage(scenarioLine["p"][2],getImgCell)
+              this.getRightImage(scenarioLine["p"][2],getImgCell,isCharSpeaking)
               
             }
             characterText.innerHTML = scenarioLine["t"];
             charcterSpeech.innerHTML = scenarioLine["d"];
             await this.waitingKeypress();
           } else {
+            isCharSpeaking = false;
             this.url = '';
             if (scenarioLine["p"]) {
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
-              this.getRightImage(scenarioLine["p"][2],getImgCell)
+              this.getRightImage(scenarioLine["p"][2],getImgCell,isCharSpeaking)
             }
             characterText.innerHTML = "";
             charcterSpeech.innerHTML = scenarioLine["a"];
@@ -180,7 +183,7 @@ export default {
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
       },
-      getRightImage(nameCharacterOrItem, getImgCell) {
+      getRightImage(nameCharacterOrItem, getImgCell, isCharSpeaking) {
 
         var images = document.getElementsByTagName('img');
 
@@ -193,7 +196,10 @@ export default {
                     }
 
                     getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
-                    this.url = this.elementsImages[key]["url"]
+                    if(isCharSpeaking){
+                      this.url = this.elementsImages[key]["url"]
+                    }
+                    
                     return this.elementsImages[key]["url"]
                 }                
             }
