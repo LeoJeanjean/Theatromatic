@@ -17,7 +17,7 @@
             <td :id="perso._id+'g'">{{ perso.gender }}</td>
             <td :id="perso._id+'j'">{{ perso.job }}</td>
             <td :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></td>
-            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl.match(/\.(jpeg|jpg|gif|png)$/ != null) ? perso.choosenImageUrl : '@/assets/placeholder.png'" alt="aucune image sélectionnée"/></td>
+            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl.match(/\.(jpeg|jpg|gif|png)$/ != null) ? '@/assets/placeholder.png' : perso.choosenImageUrl" alt="aucune image sélectionnée"/></td>
             <td class="flex-column">
               <button class="edit" @click="selectCharacter(perso._id)" title="Modifier le personnage">|</button>
               <button class="suppr" @click="deleteConfirm(perso._id,perso.name)" title="Supprimer le personnage">X</button>
