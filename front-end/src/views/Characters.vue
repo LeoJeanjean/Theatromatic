@@ -17,7 +17,7 @@
             <td :id="perso._id+'g'">{{ perso.gender }}</td>
             <td :id="perso._id+'j'">{{ perso.job }}</td>
             <td :id="perso._id+'c'" v-text="perso.characteristics ? perso.characteristics.toString() : 'pas de caractéristique'"></td>
-            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl" alt="aucune image sélectionnée" onerror="placeHolder(perso._id+'i')"/></td>
+            <td><img class="case" :id="perso._id+'i'" :src="perso.choosenImageUrl.match(/\.(jpeg|jpg|gif|png)$/ != null) ? perso.choosenImageUrl : '@/assets/placeholder.png'" alt="aucune image sélectionnée"/></td>
             <td class="flex-column">
               <button class="edit" @click="selectCharacter(perso._id)" title="Modifier le personnage">|</button>
               <button class="suppr" @click="deleteConfirm(perso._id,perso.name)" title="Supprimer le personnage">X</button>
@@ -157,9 +157,6 @@ export default {
     confirm: false
   }),
   methods: {
-    placeHolder: function (id) {
-      document.getElementById(id).src = PlaceHolder
-    },
     checkForm: async function (update) {
       if (this.persoSelect.name && this.persoSelect.gender && this.persoSelect.job && this.persoSelect.choosenImageUrl) {
         if (!update) {
