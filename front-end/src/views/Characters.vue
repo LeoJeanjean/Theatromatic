@@ -126,6 +126,7 @@
 import axios from "axios";
 import CharacterForm from '../components/CharacterForm.vue'
 import Character from "@/models/Character";
+import Menu from "../assets/menu.mp3"
 
 export default {
   name: "Characters",
@@ -330,6 +331,7 @@ export default {
       this.persoSelect.choosenImageUrl = imageUrl;
     },
     redirectPage (route) {
+      this.$emit('changeMusic', Menu);
       this.$router.push(route)
     }
   },
@@ -430,7 +432,7 @@ export default {
   color: white;
 }
 .background .b1 {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 h2 {
