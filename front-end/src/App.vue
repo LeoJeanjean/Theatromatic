@@ -4,31 +4,12 @@ import { RouterView } from 'vue-router'
 
 <template>
   <RouterView @changeMusic="changeMusic" @send="receive"/>
-  <div id="music" @click="playMusic()"
-       style="
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    position: absolute;
-    bottom: 0;
-    width: 350px;
-    height: 30px;
-    right: 0;
-    opacity: 1;
-    background: no-repeat center url('../src/assets/Planche1.png');
-    background-size: 350px 30px;"
-  >
-    <p>Cliquer pour lancer le thème musical</p>
-  </div>
 </template>
 
 <script>
 import useUserStore from "./stores/user";
 import { mapState } from 'pinia';
 import LoginView from './views/LoginView.vue';
-import Test from './assets/Test.mp3';
 
 export default {
     data() {
@@ -57,22 +38,6 @@ export default {
       changeMusic(childData) {
         this.audio.src = childData
         this.audio.play();
-      },
-      async playMusic() {
-        if (!this.music) {
-          this.music = true;
-          this.audio.src = Test;
-          this.audio.loop = true;
-          await this.audio.play();
-          const sleep = (milliseconds) => {
-                return new Promise(resolve => setTimeout(resolve, milliseconds))
-          }
-          for (let i = 100; i >= 0; i--) {
-            document.getElementById('music').style.opacity = i/100
-            await sleep(1)
-          }
-          document.getElementById('music').style.zIndex = -100
-        }
       }
     },
     computed: {
@@ -80,6 +45,7 @@ export default {
     },
     mounted() {
       this.isConnected = localStorage.getItem("user") !== null;
+      this.audio.loop = true;
     },
     components: { LoginView }
 }
