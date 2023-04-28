@@ -11,6 +11,7 @@
             <div class="text-speaking-char">
                 <span class="span-text"></span>
             </div>
+            <div class="indication-press-key">Presser Espace pour continuer</div>
         </div>
       </div>
   </div>
@@ -123,8 +124,7 @@ export default {
         characterText.innerHTML = ""
         charcterSpeech.innerHTML = parsedScenario[1]["b"];
 
-        await sleep(2000)
-
+        await this.waitingKeypress();
 
         for (let i = 2; i < parsedScenario.length - 1; i++) {
 
@@ -140,7 +140,7 @@ export default {
             }
             characterText.innerHTML = scenarioLine["t"];
             charcterSpeech.innerHTML = scenarioLine["d"];
-            await sleep(2000)
+            await this.waitingKeypress();
           } else {
             if (scenarioLine["p"]) {
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
@@ -148,7 +148,8 @@ export default {
             }
             characterText.innerHTML = "";
             charcterSpeech.innerHTML = scenarioLine["a"];
-            await sleep(2000)
+            await this.waitingKeypress();
+
           }
         }
         characterText.innerHTML = ""
@@ -161,6 +162,17 @@ export default {
         }
 
       },
+      waitingKeypress() {
+        return new Promise((resolve) => {
+          document.addEventListener('keydown', onKeyHandler);
+          function onKeyHandler(e) {
+            if (e.keyCode === 32) {
+              document.removeEventListener('keydown', onKeyHandler);
+              resolve();
+            }
+          }
+        });
+      },
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
       },
@@ -170,18 +182,11 @@ export default {
 
         for (const key in this.elementsImages) {
                 if(nameCharacterOrItem == this.elementsImages[key]["name"]) {
-
                     for (let i = 0; i < images.length; i++) {
                         if (images[i].src == this.elementsImages[key]["url"] && images[i].className !== "c"+getImgCell[1]+"r"+getImgCell[3]) {
                             images[i].setAttribute('src',"");
                         }
-                    }
-
-                    console.log("*****************************");
-                    console.log("c"+getImgCell[1]+"r"+getImgCell[3]);
-                    console.log(this.elementsImages[key]["url"]);
-                    console.log("*****************************");
-                    
+                    }                    
                     getImgCell.setAttribute("src", this.elementsImages[key]["url"])
                     return this.elementsImages[key]["url"]
                 }                
@@ -294,6 +299,11 @@ export default {
     .fade-enter-from,
     .fade-leave-to {
       opacity: 0;
+    }
+
+    .indication-press-key {
+      display: flex;
+      justify-content: end;
     }
 
 </style>
