@@ -218,7 +218,7 @@ export default {
         width: 80%;
     }
 
-    .speaking-char {
+    .container-speak .speaking-char {
         border:solid 2px #000;
         margin-top: 30px;
         background-color: white;

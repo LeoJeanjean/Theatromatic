@@ -1,7 +1,7 @@
 <template>
 
   <div class="background-final-scene"></div> 
-  <div class="container-final-scene">
+  <div class="container-final-scene normal">
     <h1>Dialog</h1>
     <div class="speaking-char">
       <div class="text" id="text-id">
@@ -144,5 +144,12 @@
 
   .container-final-scene {
     padding: 20px;
+  }
+
+  .normal .speaking-char {
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0);
+    padding: 10px;
+    font-size: 20px;
   }
 </style>
