@@ -9,7 +9,8 @@
                 <span class="span-speaking-char"></span>
             </div>
             <div class="text-speaking-char">
-                <span class="span-text"></span>
+                <img class="img-char" v-if="this.url != ''" :src="url">
+                <div class="span-text"></div>
             </div>
             <div class="indication-press-key">Presser Espace pour continuer</div>
         </div>
@@ -26,6 +27,7 @@ export default {
         return {
             selectedImage: "",
             preparation: true,
+            url: "",
         }
     }, 
     props: {
@@ -123,28 +125,33 @@ export default {
 
         characterText.innerHTML = ""
         charcterSpeech.innerHTML = parsedScenario[1]["b"];
+        
 
         await this.waitingKeypress();
 
         for (let i = 2; i < parsedScenario.length - 1; i++) {
 
           const scenarioLine = parsedScenario[i];
+          var isCharSpeaking = false;
 
           if (scenarioLine["d"]) {
+            isCharSpeaking = true;
 
             if (scenarioLine["p"]) {
                 
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
-              this.getRightImage(scenarioLine["p"][2],getImgCell)
+              this.getRightImage(scenarioLine["p"][2],getImgCell,isCharSpeaking)
               
             }
             characterText.innerHTML = scenarioLine["t"];
             charcterSpeech.innerHTML = scenarioLine["d"];
             await this.waitingKeypress();
           } else {
+            isCharSpeaking = false;
+            this.url = '';
             if (scenarioLine["p"]) {
               let getImgCell = document.querySelector('.c' + scenarioLine["p"][0] + "r" + scenarioLine["p"][1] + "img")
-              this.getRightImage(scenarioLine["p"][2],getImgCell)
+              this.getRightImage(scenarioLine["p"][2],getImgCell,isCharSpeaking)
             }
             characterText.innerHTML = "";
             charcterSpeech.innerHTML = scenarioLine["a"];
@@ -158,7 +165,7 @@ export default {
         var images = document.getElementsByTagName('img');
 
         for (let i = 0; i < images.length; i++) {
-            images[i].setAttribute("src","")
+            images[i].setAttribute("src","https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png")
         }
 
       },
@@ -176,7 +183,7 @@ export default {
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
       },
-      getRightImage(nameCharacterOrItem, getImgCell) {
+      getRightImage(nameCharacterOrItem, getImgCell, isCharSpeaking) {
 
         var images = document.getElementsByTagName('img');
 
@@ -186,8 +193,13 @@ export default {
                         if (images[i].src == this.elementsImages[key]["url"] && images[i].className !== "c"+getImgCell[1]+"r"+getImgCell[3]) {
                             images[i].setAttribute('src',"");
                         }
-                    }                    
-                    getImgCell.setAttribute("src", this.elementsImages[key]["url"])
+                    }
+
+                    getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
+                    if(isCharSpeaking){
+                      this.url = this.elementsImages[key]["url"]
+                    }
+                    
                     return this.elementsImages[key]["url"]
                 }                
             }
@@ -206,24 +218,40 @@ export default {
         width: 80%;
     }
 
+    .speaking-char {
+        border:solid 2px #000;
+        margin-top: 30px;
+        background-color: white;
+        padding: 10px;
+        font-size: 20px;
+    }
+
     .text-speaking-char {
         border:solid 2px #000;
         height: 20vh;
-        margin-top: 30px;
+        background-color: white;
+        padding: 10px;
+        font-size: 20px;
+        display: flex;
     }
 
     img {
-        width: 30%;
+      width: 30%;
+      aspect-ratio: 1/1;
+    }
+
+    .img-char {
+      height: 100%;
+      width: 20%;
     }
 
     .contenu {
         display: flex;
         width: 100%;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        margin-top: 50px;
         height: 100%;
+        margin-top: 18vh;
     }
 
     .container-scene {
@@ -235,11 +263,9 @@ export default {
     .grille {
         display: flex;
         flex-wrap: wrap;
-        border: 1px solid #000;
-        width: 75%;
+        width: 70%;
         height: 66%;
         margin: 0 auto;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
     .grille > div {
@@ -251,6 +277,8 @@ export default {
         grid-row: 8;
         grid-template-columns: repeat(5, minmax(0,1fr));
         grid-gap: 0;
+        background-color: white;
+        height: 40%;
     }
 
     .container > div {
@@ -271,6 +299,10 @@ export default {
     .container-scene-page {
       width: 100%;
       height: 100%;
+      background: no-repeat url("../assets/Stage.png");
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: center;
     }
 
     .scene-background {
