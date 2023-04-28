@@ -49,7 +49,6 @@ import axios from 'axios';
 import User from "../models/User";
 import useUserStore from "../stores/user";
 import { mapActions, mapState } from 'pinia'
-import Menu from "../assets/menu.mp3"
 
 
   export default {
@@ -106,7 +105,6 @@ import Menu from "../assets/menu.mp3"
         console.log(this.userDatas);
         console.log(response.data);
         if (response.data !== false) {
-          this.$emit('changeMusic', Menu);
           this.$router.push('/');
           this.$emit('send', true);
         } else {

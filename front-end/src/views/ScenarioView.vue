@@ -35,7 +35,6 @@
 import CharacterList from "@/components/characterList.vue";
 import router from "@/router";
 import axios from "axios";
-import Menu from "../assets/menu.mp3"
 import chatter from "../assets/crowd-chatter.mp3"
 export default {
   name: "ScenarioView",
@@ -48,7 +47,6 @@ export default {
   }),
   methods: {
     redirectPage(route) {
-      this.$emit('changeMusic', Menu);
       this.$router.push(route)
     },
     submit() {
