@@ -12,6 +12,7 @@
                 <img class="img-char" v-if="this.url != ''" :src="url">
                 <div class="span-text"></div>
             </div>
+            <div class="indication-press-key">Presser Espace pour continuer</div>
         </div>
       </div>
   </div>
@@ -84,8 +85,6 @@ export default {
           gridCase.appendChild(divimg)
         }
 
-        // {"s": {"arène": [2, 4], "Bob": [0, 1], "Jean": [4, 6]}}
-
         let indexOfOpenBracket = this.scenarioText.data.indexOf("[");
 
         let indexOfCloseBracket = this.scenarioText.data.lastIndexOf("]");
@@ -94,17 +93,17 @@ export default {
 
         let scenarioGridJson = JSON.parse(this.scenarioText.data);
 
-        console.log(scenarioGridJson[0]["s"]);
-
-
         for (const keyScenarioGrid in scenarioGridJson[0]["s"]) {
             let value = scenarioGridJson[0]["s"][keyScenarioGrid];
-            let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
-            for (const key in this.elementsImages) {
-                if(keyScenarioGrid == this.elementsImages[key]["name"]) {
-                    imgCase.setAttribute('src', this.elementsImages[key]["url"])
-                }                
+            if (value.length == 2) {
+                let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
+                for (const key in this.elementsImages) {
+                    if(keyScenarioGrid == this.elementsImages[key]["name"]) {
+                        imgCase.setAttribute('src', this.elementsImages[key]["url"])
+                    }                
+                }
             }
+           
 
         }
 
@@ -128,8 +127,7 @@ export default {
         charcterSpeech.innerHTML = parsedScenario[1]["b"];
         
 
-        await sleep(200000000000000000)
-
+        await this.waitingKeypress();
 
         for (let i = 2; i < parsedScenario.length - 1; i++) {
 
@@ -145,7 +143,7 @@ export default {
             }
             characterText.innerHTML = scenarioLine["t"];
             charcterSpeech.innerHTML = scenarioLine["d"];
-            await sleep(2000)
+            await this.waitingKeypress();
           } else {
             this.url = '';
             if (scenarioLine["p"]) {
@@ -154,12 +152,30 @@ export default {
             }
             characterText.innerHTML = "";
             charcterSpeech.innerHTML = scenarioLine["a"];
-            await sleep(2000)
+            await this.waitingKeypress();
+
           }
         }
         characterText.innerHTML = ""
         charcterSpeech.innerHTML = parsedScenario[parsedScenario.length - 1]["E"];
 
+        var images = document.getElementsByTagName('img');
+
+        for (let i = 0; i < images.length; i++) {
+            images[i].setAttribute("src","")
+        }
+
+      },
+      waitingKeypress() {
+        return new Promise((resolve) => {
+          document.addEventListener('keydown', onKeyHandler);
+          function onKeyHandler(e) {
+            if (e.keyCode === 32) {
+              document.removeEventListener('keydown', onKeyHandler);
+              resolve();
+            }
+          }
+        });
       },
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
@@ -170,7 +186,6 @@ export default {
 
         for (const key in this.elementsImages) {
                 if(nameCharacterOrItem == this.elementsImages[key]["name"]) {
-
                     for (let i = 0; i < images.length; i++) {
                         if (images[i].src == this.elementsImages[key]["url"] && images[i].className !== "c"+getImgCell[1]+"r"+getImgCell[3]) {
                             images[i].setAttribute('src',"");
@@ -178,7 +193,6 @@ export default {
                     }
 
                     getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
-                    console.log(this.elementsImages[key]["url"])
                     this.url = this.elementsImages[key]["url"]
                     return this.elementsImages[key]["url"]
                 }                
@@ -311,6 +325,11 @@ export default {
     .fade-enter-from,
     .fade-leave-to {
       opacity: 0;
+    }
+
+    .indication-press-key {
+      display: flex;
+      justify-content: end;
     }
 
 </style>

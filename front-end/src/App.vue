@@ -1,13 +1,9 @@
 <script setup>
 import { RouterView } from 'vue-router'
-
-
 </script>
 
 <template>
-  <RouterView @send="receive"/>
-
-  
+  <RouterView @stopMusic="stopMusic" @changeMusic="changeMusic" @send="receive"/>
 </template>
 
 <script>
@@ -19,7 +15,9 @@ export default {
     data() {
         return {
             loginOrLogout: undefined,
-            isConnected: false
+            isConnected: false,
+            music: false,
+            audio: new Audio
         };
     },
     methods : {
@@ -36,13 +34,21 @@ export default {
         localStorage.removeItem("user")
         this.$router.push("/login")
         this.isConnected = false;
+      },
+      changeMusic(childData) {
+        this.audio.src = childData
+        this.audio.play();
+      },
+      stopMusic() {
+        this.audio.pause();
       }
     },
     computed: {
         ...mapState(useUserStore, ["userDatas"]),
     },
     mounted() {
-        this.isConnected = localStorage.getItem("user") !== null;
+      this.isConnected = localStorage.getItem("user") !== null;
+      this.audio.loop = true;
     },
     components: { LoginView }
 }
