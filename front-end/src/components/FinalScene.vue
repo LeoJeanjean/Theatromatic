@@ -68,6 +68,7 @@
           clone.style.display = "inherit"
           this.original.parentNode.appendChild(clone);
         }
+        
         this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
       },
 
@@ -116,19 +117,6 @@
   },mounted() {
       this.original = document.getElementById('text-id')      
       this.timeSensativeAction();
-      console.log(JSON.parse(this.scenarioText.data));
-      let persoList = JSON.parse(localStorage.getItem("persoList"));
-      console.log(persoList);
-      let detailScenario = "";
-      for(let i = 0; i < persoList.length; i++ ) {
-        console.log(persoList[i]["name"]);
-        detailScenario += persoList[i]["name"] + ": " + persoList[i]["gender"] + ", " + persoList[i]["job"] + ", "  + persoList[i]["characteristics"] + ". "
-      }
-      detailScenario += "\n" + localStorage.getItem("script");
-
-      this.chatGptRequest += "\n" + detailScenario;
-
-      console.log(this.chatGptRequest);
     }
   }
 

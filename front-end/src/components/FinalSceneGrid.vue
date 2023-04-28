@@ -82,8 +82,6 @@ export default {
           gridCase.appendChild(divimg)
         }
 
-        // {"s": {"arène": [2, 4], "Bob": [0, 1], "Jean": [4, 6]}}
-
         let indexOfOpenBracket = this.scenarioText.data.indexOf("[");
 
         let indexOfCloseBracket = this.scenarioText.data.lastIndexOf("]");
@@ -92,17 +90,17 @@ export default {
 
         let scenarioGridJson = JSON.parse(this.scenarioText.data);
 
-        console.log(scenarioGridJson[0]["s"]);
-
-
         for (const keyScenarioGrid in scenarioGridJson[0]["s"]) {
             let value = scenarioGridJson[0]["s"][keyScenarioGrid];
-            let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
-            for (const key in this.elementsImages) {
-                if(keyScenarioGrid == this.elementsImages[key]["name"]) {
-                    imgCase.setAttribute('src', this.elementsImages[key]["url"])
-                }                
+            if (value.length == 2) {
+                let imgCase = document.querySelector('.'+"c"+value[0]+"r"+value[1]+"img")
+                for (const key in this.elementsImages) {
+                    if(keyScenarioGrid == this.elementsImages[key]["name"]) {
+                        imgCase.setAttribute('src', this.elementsImages[key]["url"])
+                    }                
+                }
             }
+           
 
         }
 
@@ -156,6 +154,12 @@ export default {
         characterText.innerHTML = ""
         charcterSpeech.innerHTML = parsedScenario[parsedScenario.length - 1]["E"];
 
+        var images = document.getElementsByTagName('img');
+
+        for (let i = 0; i < images.length; i++) {
+            images[i].setAttribute("src","")
+        }
+
       },
       getRandomInt(max) {
         return Math.floor(Math.random() * max);
@@ -173,7 +177,12 @@ export default {
                         }
                     }
 
-                    getImgCell.setAttribute("src", this.elementsImages[key]["url"] )
+                    console.log("*****************************");
+                    console.log("c"+getImgCell[1]+"r"+getImgCell[3]);
+                    console.log(this.elementsImages[key]["url"]);
+                    console.log("*****************************");
+                    
+                    getImgCell.setAttribute("src", this.elementsImages[key]["url"])
                     return this.elementsImages[key]["url"]
                 }                
             }
