@@ -15,6 +15,11 @@
         </div>
       </div>
   </div>
+  <div class="return-btn-div">
+    <button class="b1" @click="redirectPage('/scenario')"> Retour </button>
+  </div>
+
+  
 </template>
 
 <script>
@@ -107,7 +112,9 @@ export default {
 
         return 'test'
       },
-
+      redirectPage (route) {
+        this.$router.push(route)
+      },
       async createScene() {
 
         let parsedScenario = JSON.parse(this.scenarioText.data);
@@ -160,6 +167,9 @@ export default {
         for (let i = 0; i < images.length; i++) {
             images[i].setAttribute("src","")
         }
+
+        await sleep(1000);
+        document.querySelector('.return-btn-div').style.display = "flex";
 
       },
       waitingKeypress() {
@@ -304,6 +314,11 @@ export default {
     .indication-press-key {
       display: flex;
       justify-content: end;
+    }
+
+    .return-btn-div {
+      display: none;
+      justify-content: center;
     }
 
 </style>

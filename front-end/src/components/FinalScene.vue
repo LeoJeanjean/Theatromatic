@@ -9,8 +9,13 @@
         </svg>
       </div>
     </div>
+    <div v-if="end" class="div-return-btn">
+      <button class="b1" @click="redirectPage('/scenario')"> Retour </button>  
+    </div>
   </div>
-</template>
+</template>    
+
+
 
 <script>
   export default {
@@ -24,6 +29,7 @@
           normal: 90,
           fast: 40,
           superFast: 10,
+          end: false
         },
         textLines: [
           {speed: 10, string: "Oh, hello!", character: "Tom"},
@@ -88,7 +94,9 @@
         this.original.parentNode.appendChild(clone);
         this.original.parentNode.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
       },
-
+      redirectPage (route) {
+        this.$router.push(route)
+      },
       async timeSensativeAction() {
         const sleep = (milliseconds) => {
           return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -125,7 +133,13 @@
 
   },mounted() {
       this.original = document.getElementById('text-id')      
-      this.timeSensativeAction();
+      this.timeSensativeAction().then(
+        () => {
+          this.end = true;
+          //document.body.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+        }
+      );
+
     }
   }
 
@@ -145,4 +159,10 @@
   .container-final-scene {
     padding: 20px;
   }
+
+  .div-return-btn {
+      display: flex;
+      justify-content: center;
+  }
+
 </style>
