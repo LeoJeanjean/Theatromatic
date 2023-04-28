@@ -218,7 +218,7 @@ export default {
         width: 80%;
     }
 
-    .speaking-char {
+    .container-speak .speaking-char {
         border:solid 2px #000;
         margin-top: 30px;
         background-color: white;
@@ -272,7 +272,7 @@ export default {
         flex: 1 1 80px;
     }
 
-    .container {
+    .contenu .container {
         display: grid;
         grid-row: 8;
         grid-template-columns: repeat(5, minmax(0,1fr));
@@ -281,7 +281,7 @@ export default {
         height: 40%;
     }
 
-    .container > div {
+    .contenu .container > div {
         display: flex;
         justify-content: center;
         align-items: center;
