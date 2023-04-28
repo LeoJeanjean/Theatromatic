@@ -10,8 +10,9 @@
             <div class="left"></div>
             <div class="right"></div>
           </div>
+          <div id="public"></div>
         </div>
-        <button id="starter" :disabled="disabled" @click="startScene()"> Commencer </button>
+        <button id="starter" class="b1" :disabled="disabled" @click="startScene()"> {{ this.Bouton }} </button>
       </div>
       <div v-else>
         <FinalScene v-if="this.sceneType=='dialog'" :scenarioText="reponseString" />
@@ -36,6 +37,7 @@ import axios from "axios";
         elements: [],
         personnages: [],
         elementsImages: [],
+        Bouton: "script...",
         sceneType: localStorage.getItem('sceneType'),
         urlImages: 'https://pixabay.com/api/?key=35717457-65a4b6adba7729f12e69b314c&safesearch=true&image_type=vector&per_page=3',
         finalString: `Je vais te donner un resume de texte et un ou plusieurs personnage avec des paramètre a respecter . Ecris moi un scenario en une seule ligne impliquant ces personnages et le resume, sous la forme JSON valide suivante: [ {"s":  {nom du/des item(s) entre 1 et 3 et leurs nombres si plusieurs et la position initial des personnages si ils sont là dès le debut par exemple table: position dans une grille de 5 (0 à 4) par 8 (0 à 7)  },{ "b" : phrase introductive }, { "d":  replique du personnage qui parle  sans mettre son nom pour renseigner qu'il parle, "t" : nom du personnage qui parle  si il n'y en a pas car il s'agit jute d'une action mettre null, "a": action n'impliquant pas les répliques de personnages s'il y en a, "p": [position du personnage dans une grille de 5 (0 à 4) par 8 (0 à 7)  il ne peut y avoir 2 elements dans la meme position, nom du personnage positionne] comme [1,2,Bebo]}, répéter sur ce même model à chaque fois que quelque chose de nouveau arrive comme action ou personnage prenant la parole, {"E": texte de fin} ]. Un seul personnage peut se déplacer à la fois.
@@ -63,7 +65,10 @@ import axios from "axios";
         scene.className = "expand";
 
         var starter = document.getElementById("starter");
-        starter.className = "fade-out";
+        starter.className = "fade-out b1";
+
+        var publicGif = document.getElementById("public");
+        publicGif.className = "go-down";
 
         let titleScene = document.querySelector('.title-scene');
         titleScene.innerHTML = localStorage.getItem('name')
@@ -89,6 +94,7 @@ import axios from "axios";
           },
       ).then((response) => {
         this.reponseString = response.data;
+        this.Bouton = "images...";
         this.getImagesOfElements()
       })
       },
@@ -125,6 +131,7 @@ import axios from "axios";
           })
         });
         console.log(this.elementsImages)
+        this.Bouton = "Commencer!"
         this.disabled = false;
       },
     },
@@ -175,4 +182,10 @@ import axios from "axios";
 .fade-leave-to {
   opacity: 0;
 }
+
+.container-curtain .b1{
+  font-family: 'YosterIsland';
+}
+
+
 </style>
