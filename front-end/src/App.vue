@@ -1,11 +1,9 @@
 <script setup>
 import { RouterView } from 'vue-router'
-
-
 </script>
 
 <template>
-  <RouterView @send="receive"/>
+  <RouterView @changeMusic="changeMusic" @send="receive"/>
   <div id="music" @click="playMusic()"
        style="
     display: flex;
@@ -37,7 +35,8 @@ export default {
         return {
             loginOrLogout: undefined,
             isConnected: false,
-            music: false
+            music: false,
+            audio: new Audio
         };
     },
     methods : {
@@ -55,12 +54,16 @@ export default {
         this.$router.push("/login")
         this.isConnected = false;
       },
+      changeMusic(childData) {
+        this.audio.src = childData
+        this.audio.play();
+      },
       async playMusic() {
         if (!this.music) {
           this.music = true;
-          let audio = new Audio(Test);
-          audio.loop = true;
-          audio.play();
+          this.audio.src = Test;
+          this.audio.loop = true;
+          await this.audio.play();
           const sleep = (milliseconds) => {
                 return new Promise(resolve => setTimeout(resolve, milliseconds))
           }
